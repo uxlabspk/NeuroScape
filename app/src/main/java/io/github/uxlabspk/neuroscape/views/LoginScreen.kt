@@ -38,15 +38,21 @@ fun LoginScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(painter = painterResource(id = R.drawable.ic_sign_in_flow), contentDescription = null)
-            UserInput(text = "Enter your username...", inputIcon = Icons.Default.Email,
+            Image(
+                painter = painterResource(id = R.drawable.ic_sign_in_flow),
+                contentDescription = null
+            )
+            UserInput(
+                text = "Enter your username...", inputIcon = Icons.Default.Email,
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp))
+                    .padding(vertical = 4.dp)
+            )
             PasswordInput(
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp))
+                    .padding(vertical = 4.dp)
+            )
             PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth())
         }
     }
