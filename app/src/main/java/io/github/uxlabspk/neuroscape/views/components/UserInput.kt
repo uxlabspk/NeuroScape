@@ -31,8 +31,8 @@ import io.github.uxlabspk.neuroscape.R
 @Composable
 fun UserInput(
     text: String,
-    inputIcon: ImageVector
-
+    inputIcon: ImageVector,
+    modifier: Modifier
 ) {
     var textState by remember {
         mutableStateOf("")
@@ -41,7 +41,7 @@ fun UserInput(
     TextField(
         value = textState,
         onValueChange = { textState = it},
-        modifier = Modifier,
+        modifier = modifier,
         label = { Text(text) },
         leadingIcon = {
             Icon(imageVector = inputIcon, contentDescription = "Email Icon")
@@ -57,25 +57,28 @@ fun UserInput(
             focusedContainerColor = Color.LightGray,
             cursorColor = Color.Black
         ),
-        shape = RoundedCornerShape(25.dp),
+        shape = RoundedCornerShape(5.dp),
         singleLine = true,
 
     )
 }
 
 @Composable
-fun PasswordInput() {
+fun PasswordInput(modifier: Modifier) {
     var password by rememberSaveable {
         mutableStateOf("")
     }
+
     var passwordVisibility by remember {
         mutableStateOf(false)
     }
-    var icon = if(passwordVisibility)
-        painterResource(id = R.drawable.ic_visible)
-    else
-        painterResource(id = R.drawable.ic_invisible)
+
+    var icon =
+        if(passwordVisibility) painterResource(id = R.drawable.ic_visible)
+        else painterResource(id = R.drawable.ic_invisible)
+
     TextField(
+        modifier = modifier,
         value = password,
         onValueChange = {
             password = it
@@ -105,7 +108,7 @@ fun PasswordInput() {
             focusedContainerColor = Color.LightGray,
             cursorColor = Color.Black
         ),
-        shape = RoundedCornerShape(25.dp),
+        shape = RoundedCornerShape(5.dp),
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
@@ -118,12 +121,12 @@ fun PasswordInput() {
 @Preview
 @Composable
 fun PasswordInputPreview() {
-    PasswordInput()
+    PasswordInput(Modifier)
 }
 
 @Preview
 @Composable
 fun PreviewTextField () {
-    UserInput(text = "Username", inputIcon = Icons.Default.Email)
+    UserInput(text = "Username", inputIcon = Icons.Default.Email, Modifier)
 
 }
