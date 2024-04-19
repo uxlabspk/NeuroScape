@@ -38,7 +38,7 @@ fun LoginScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(painter = painterResource(id = R.drawable.ic_password), contentDescription = null)
+            Image(painter = painterResource(id = R.drawable.ic_sign_in_flow), contentDescription = null)
             UserInput(text = "Enter your username...", inputIcon = Icons.Default.Email,
                 Modifier
                     .fillMaxWidth()
