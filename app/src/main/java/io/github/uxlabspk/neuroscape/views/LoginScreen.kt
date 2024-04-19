@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +45,7 @@ fun LoginScreen() {
                 contentDescription = null
             )
             UserInput(
-                text = "Enter your username...", inputIcon = Icons.Default.Email,
+                text = "Enter your email...", inputIcon = Icons.Default.Email,
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
@@ -53,6 +56,19 @@ fun LoginScreen() {
                     .padding(vertical = 4.dp)
             )
             PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth())
+            Row(
+                modifier = Modifier.height(34.dp).fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Don't have an account? ")
+                TextButton(
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text("Create Account")
+                }
+            }
+
         }
     }
 }
