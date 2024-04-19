@@ -1,18 +1,16 @@
 package io.github.uxlabspk.neuroscape.views
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +27,7 @@ import io.github.uxlabspk.neuroscape.views.components.UserInput
 
 @Composable
 fun LoginScreen() {
-    Column {
+    Column(Modifier.background(Color.White)) {
         TopBar(text = "Login", modifier = Modifier.height(54.dp))
         Column(
             modifier = Modifier
@@ -39,7 +37,8 @@ fun LoginScreen() {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_sign_in_flow),
+                modifier = Modifier.width(200.dp),
+                painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = null
             )
             UserInput(
