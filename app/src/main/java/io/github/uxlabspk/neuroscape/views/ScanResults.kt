@@ -42,7 +42,9 @@ fun ScanResults(isAutismTraits: Boolean) {
     ) {
         TopBar(text = "Sign in", modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp))
+            .height(44.dp),
+            {}
+        )
 
         Column(
             Modifier
@@ -68,7 +70,7 @@ fun ScanResults(isAutismTraits: Boolean) {
                 textAlign = TextAlign.Center
             )
 
-            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 120.dp))
+            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 120.dp), {})
         }
     }
 

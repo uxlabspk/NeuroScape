@@ -31,7 +31,7 @@ import io.github.uxlabspk.neuroscape.views.components.UserInput
 @Composable
 fun LoginScreen() {
     Column(Modifier.background(Color.White)) {
-        TopBar(text = "Login", modifier = Modifier.height(54.dp))
+        TopBar(text = "Login", modifier = Modifier.height(54.dp), {})
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -55,7 +55,7 @@ fun LoginScreen() {
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-            PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth())
+            PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth(), {})
             Row(
                 modifier = Modifier.height(34.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

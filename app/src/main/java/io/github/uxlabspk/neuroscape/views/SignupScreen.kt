@@ -30,7 +30,7 @@ import io.github.uxlabspk.neuroscape.views.components.UserInput
 @Composable
 fun SignupScreen() {
     Column(Modifier.background(Color.White)) {
-        TopBar(text = "Sign up", modifier = Modifier.height(54.dp))
+        TopBar(text = "Sign up", modifier = Modifier.height(54.dp), {})
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -60,7 +60,7 @@ fun SignupScreen() {
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-            PrimaryButton(text = "Sign up", modifier = Modifier.fillMaxWidth())
+            PrimaryButton(text = "Sign up", modifier = Modifier.fillMaxWidth(), {})
             Row(
                 modifier = Modifier.height(34.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

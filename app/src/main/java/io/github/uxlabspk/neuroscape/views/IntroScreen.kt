@@ -42,8 +42,8 @@ fun IntroScreen(heading: String, subheading: String) {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )
-            PrimaryButton("Login", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp))
-            SecondaryButton("Signup", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp))
+            PrimaryButton("Login", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), {})
+            SecondaryButton("Signup", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), {})
         }
     }
 }

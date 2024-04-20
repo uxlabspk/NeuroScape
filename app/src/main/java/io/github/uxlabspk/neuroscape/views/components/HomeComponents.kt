@@ -3,23 +3,31 @@ package io.github.uxlabspk.neuroscape.views.components
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.res.painterResource
@@ -31,255 +39,93 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.uxlabspk.neuroscape.R
+import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
+import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
+import io.github.uxlabspk.neuroscape.ui.theme.RedColor
 
 
 @Composable
-fun InfoHome (
-    username:String,
-    date: String,
-) {
-
-    Column(
-        modifier = Modifier
-
-    ) {
-        Text(
-            text = "Hello $username!",
-            style = MaterialTheme.typography.bodyMedium,
-            fontSize = 16.sp,
-            fontWeight = FontWeight(600)
-
-        )
-        Text(
-            text = "Last Scan on $date ",
-            style = MaterialTheme.typography.bodySmall,
-        )
-    }
-}
-
-@Composable
-fun HomeUserInfo(
-    @DrawableRes drawable: Int ,
-    username: String,
-    date: String,
-) {
-
+fun UserInfo(modifier: Modifier, username: String, time: String) {
     Surface(
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier,
-        color = Color(0xFFF7F7F7)
+        Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier
-                .width(354.dp)
-                .height(112.dp)
-                .padding(horizontal = 16.dp)                ,
-            verticalAlignment = Alignment.CenterVertically,
-
-
-            ) {
-            Column(modifier = Modifier
-            ) {
-                Image(
-                    painterResource(drawable),
-                    contentDescription = null,
-                    modifier = Modifier.size(height = 65.dp, width = 79.dp)
-                )
-            }
-            Column(
-                modifier = Modifier
-            ) {
-                InfoHome(username, date)
-            }
-        }
-    }
-
-}
-
-@Composable
-fun TestingInfo(
-    @StringRes testing: Int,
-    @StringRes score: Int,
-    number: Int,
-) {
-    Column (modifier = Modifier){
-        Text(
-            stringResource(testing),
-            fontWeight = FontWeight(500),
-            fontSize = 20.sp
-        )
-        Text(
-            stringResource(score)+ "   " + number + "/10",
-            fontSize = 14.sp,
-            fontWeight = FontWeight(400)
-        )
-    }
-}
-@Composable
-fun ASD(
-) {
-    Surface(
-        modifier = Modifier
-            .height(32.dp)
-            .width(57.dp)
-        ,
-        shape = MaterialTheme.shapes.small,
-        color = Color.Red,
-    ) {
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            modifier = modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "ASD",
-                color = Color.White,
+            Image(
+                modifier = Modifier
+                    .height(60.dp)
+                    .padding(end = 10.dp),
+                painter = painterResource(id = R.drawable.ic_logo),
+                contentDescription = null
             )
+            Column {
+                Text("Hi, ${username}!", fontWeight = FontWeight.SemiBold)
+                Text("Last Scan at ${time}")
+            }
         }
     }
 }
 
 
+
+
+
 @Composable
-fun Tests(
-    testing: Int,
-    score: Int,
-    number: Int,
+fun RecentScans(
+    scanTitle: String,
+    scanScore: Int,
+    isAutismTrait: Boolean,
     modifier: Modifier
 ) {
-    Surface(
-        modifier = Modifier
-            .width(354.dp)
-            .height(72.dp),
-        shape = MaterialTheme.shapes.medium,
-        color = Color(0xFFF7F7F7)
+    var color = if (isAutismTrait) RedColor else BlueColor
 
+    Surface (
+        Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         Row(
+            modifier = modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            Column(
-
-            ) {
-                TestingInfo(
-                    testing,
-                    score,
-                    number
-                )
-            }
-            Column(
-
-            ) {
-                ASD()
-            }
-        }
-    }
-}
-
-@Composable
-fun ButtonScan(
-    buttonText: String,
-    btnColors: ButtonColors,
-    textColor: Color
-) {
-    Button(onClick = { /*TODO*/ }, colors = btnColors, shape = MaterialTheme.shapes.small,) {
-        Text(text = buttonText, fontSize = 16.sp, color = textColor)
-
-    }
-}
-
-
-@Composable
-fun ScanButtons() {
-    Surface (
-    ) {
-        Row(
-            modifier = Modifier
-                .width(354.dp)
-                .height(44.dp)
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-
-            ) {
             Column {
-                ButtonScan(
-                    btnColors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF7F7F7)),
-                    buttonText = "View All Scan",
-                    textColor = Color.Black
-                )
+                Text(scanTitle, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text("Scan Results ${scanScore}/10")
             }
-            Column {
-
-                ButtonScan(
-                    buttonText = "New Scan",
-                    btnColors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0080FF)),
-                    textColor = Color.White
-                )
-            }
-        }
-    }
-}
-
-
-
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
-@Composable
-fun HomeUserInfoPreview( ) {
-
-        HomeUserInfo(R.drawable.ic_logo,"Hamza Waheed", "April 11, 2024")
-
-
-}
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
-@Composable
-fun TestsPreview () {
-    Tests(modifier = Modifier,testing = R.string.testing, score = R.string.Score, number = 1)
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
-@Composable
-fun BtnPre() {
-
-        ScanButtons()
-
-}
-
-@Composable
-fun Home() {
-
-        Column (
-
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row {
-                Spacer(modifier = Modifier.height(140.dp). padding(top = 24.dp))
-                HomeUserInfo(R.drawable.ic_sign_in_flow,"Hamza Waheed", "April 11, 2024")
-            }
-            Row {
-                Spacer(modifier = Modifier.height(70.dp))
-                ScanButtons()
-
-            }
-            Row {
-                Spacer(modifier = Modifier.height(90.dp))
-
-                Tests(modifier = Modifier,testing = R.string.testing, score = R.string.Score, number = 1)
-            }
-            Row(
-                horizontalArrangement = Arrangement.Start
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = color,
+                        shape = CircleShape
+                    )
+                    .padding(10.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text("Recent", textAlign = TextAlign.Start)
+                Text("Autism Found", color = Color.White)
             }
         }
     }
-
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 390, heightDp = 844)
-@Composable
-fun HomPre () {
-
-        Home()
-
 }
+
+
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+@Composable
+fun TestsPreview() {
+    RecentScans(scanTitle = "sdf", scanScore = 3, isAutismTrait = false, modifier = Modifier)
+}
+
+@Preview
+@Composable
+fun PreviewUserInfo() {
+    UserInfo(Modifier, "prog", "April 20, 2021")
+}
+
+
+
+

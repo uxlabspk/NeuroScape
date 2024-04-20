@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 
 @Composable
-fun PrimaryButton(text: String, modifier: Modifier) {
+fun PrimaryButton(text: String, modifier: Modifier, onClick: () -> Unit) {
     Button(
         modifier = modifier,
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = BlueColor,
             contentColor = Color(0xFFffffff)
@@ -54,5 +54,5 @@ fun PrimaryButton(text: String, modifier: Modifier) {
 @Preview (widthDp = 300, heightDp = 42)
 @Composable
 fun PreviewButton() {
-    PrimaryButton(text = "sdf", Modifier)
+    PrimaryButton(text = "sdf", Modifier, {})
 }

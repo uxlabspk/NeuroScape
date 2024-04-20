@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 
 @Composable
-fun SecondaryButton(text: String, modifier: Modifier) {
+fun SecondaryButton(text: String, modifier: Modifier, onClick: () -> Unit) {
     Button(
         modifier = modifier,
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = GrayColor,
             contentColor = Color(0xFF444444)
@@ -42,5 +42,5 @@ fun SecondaryButton(text: String, modifier: Modifier) {
 @Preview(widthDp = 300, heightDp = 42)
 @Composable
 fun PreviewSeButton() {
-    SecondaryButton(text = "sdf", Modifier)
+    SecondaryButton(text = "sdf", Modifier, {})
 }
