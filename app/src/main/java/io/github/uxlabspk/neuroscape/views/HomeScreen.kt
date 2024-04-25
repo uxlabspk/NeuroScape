@@ -47,10 +47,10 @@ fun HomeScreen() {
                 AltButton("All Scans", Modifier, {})
                 PrimaryButton("New Scans", Modifier, {})
             }
-            Text("Recents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+            Text("Resents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             LazyColumn {
                 items(4) { item ->
-                    RecentScans("sdf", 3, false, Modifier.background(OffWhiteColor))
+                    RecentScans("sdf", 3, true, Modifier.background(OffWhiteColor))
                 }
             }
 

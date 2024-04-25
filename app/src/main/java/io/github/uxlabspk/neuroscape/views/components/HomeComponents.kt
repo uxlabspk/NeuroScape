@@ -81,7 +81,8 @@ fun RecentScans(
     isAutismTrait: Boolean,
     modifier: Modifier
 ) {
-    var color = if (isAutismTrait) RedColor else BlueColor
+    val color = if (isAutismTrait) RedColor else Color.Transparent
+    val text = if (isAutismTrait) "ASD" else ""
 
     Surface (
         Modifier
@@ -102,12 +103,12 @@ fun RecentScans(
                 modifier = Modifier
                     .background(
                         color = color,
-                        shape = CircleShape
+                        shape = RoundedCornerShape(5.dp),
                     )
-                    .padding(10.dp),
+                    .padding(5.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Autism Found", color = Color.White)
+                Text(text, color = Color.White)
             }
         }
     }
@@ -117,7 +118,7 @@ fun RecentScans(
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun TestsPreview() {
-    RecentScans(scanTitle = "sdf", scanScore = 3, isAutismTrait = false, modifier = Modifier)
+    RecentScans(scanTitle = "sdf", scanScore = 3, isAutismTrait = true, modifier = Modifier)
 }
 
 @Preview
