@@ -58,10 +58,6 @@ fun HomeScreen() {
     }
 }
 
-
-
-
-
 @Preview(showBackground = true, widthDp = 330, heightDp = 800)
 @Composable
 fun PreviewHomeScreen() {

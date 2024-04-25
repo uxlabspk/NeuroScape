@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
+import io.github.uxlabspk.neuroscape.views.components.McqsRadioButton
 import io.github.uxlabspk.neuroscape.views.components.NavigationButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
@@ -38,14 +39,38 @@ fun QuestionsScreen() {
             }
 
 
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(2.dp)
-                .background(BlueColor))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .padding(vertical = 16.dp)
+                    .background(BlueColor)
+            )
+
             Row {
-                NavigationButton(text = "Previous", modifier = Modifier.fillMaxWidth(1/2f), isNext = false, {})
-                NavigationButton(text = "Next", modifier = Modifier.fillMaxWidth(), isNext = true, {})
+
+                NavigationButton(
+                    text = "Previous",
+                    modifier = Modifier.fillMaxWidth(1 / 2f),
+                    isNext = false,
+                    {})
+                NavigationButton(
+                    text = "Next",
+                    modifier = Modifier.fillMaxWidth(),
+                    isNext = true,
+                    {})
+
             }
+
+
+
+
+            Column {
+                McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO")
+
+            }
+
         }
     }
 }

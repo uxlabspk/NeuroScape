@@ -70,10 +70,6 @@ fun UserInfo(modifier: Modifier, username: String, time: String) {
     }
 }
 
-
-
-
-
 @Composable
 fun RecentScans(
     scanTitle: String,
