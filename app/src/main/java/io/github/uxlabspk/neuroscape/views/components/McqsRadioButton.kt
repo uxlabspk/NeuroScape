@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 
 @Composable
 fun McqsRadioButton(
@@ -31,16 +30,17 @@ fun McqsRadioButton(
     option2: String,
     option3: String,
     option4: String,
+    option5: String
 ) {
-    val optionsMcqs = listOf(option1, option2, option3,option4)
+    val optionsMcqs = listOf(option1, option2, option3, option4, option5)
     var optionState by remember { mutableStateOf("") }
 
     Box (
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Column (
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth(),
 
         ) {
             optionsMcqs.forEach {
@@ -73,7 +73,7 @@ fun CustomRadioGroup(
             color = Color.LightGray,
             border = BorderStroke(
                 width = 2.dp,
-                color = if (selected) Color(0xFF0080FF) else Color.Transparent
+                color = if (selected) BlueColor else Color.Transparent
             )
         ) {
             Row (
@@ -83,9 +83,8 @@ fun CustomRadioGroup(
                 Text(text = title ,
                     modifier = Modifier.padding(horizontal = 12.dp))
                 RadioButton(
-//                    enabled = selected,
                     selected = selected,
-                    colors = RadioButtonDefaults.colors(Color.Blue),
+                    colors =  RadioButtonDefaults.colors(BlueColor),
                     onClick = {
                     onValueChange(title)
 
@@ -100,7 +99,7 @@ fun CustomRadioGroup(
 @Preview
 @Composable
 fun McqsPreview() {
-    McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO")
+    McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO", option5 = "sdf")
 
 }
 

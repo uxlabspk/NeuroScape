@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,15 +39,12 @@ fun QuestionsScreen() {
                 Text(text = "sdsdf", Modifier.padding(10.dp))
             }
 
+            Column (
+                Modifier.fillMaxHeight(9/10f)
+            ) {
+                McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO", option5 = "Killer")
 
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .padding(vertical = 16.dp)
-                    .background(BlueColor)
-            )
+            }
 
             Row {
 
@@ -54,20 +52,16 @@ fun QuestionsScreen() {
                     text = "Previous",
                     modifier = Modifier.fillMaxWidth(1 / 2f),
                     isNext = false,
-                    {})
+                    {}
+                )
                 NavigationButton(
                     text = "Next",
                     modifier = Modifier.fillMaxWidth(),
                     isNext = true,
-                    {})
+                    {}
+                )
 
             }
-
-            Column {
-                McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO")
-
-            }
-
         }
     }
 }
