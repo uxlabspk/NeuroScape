@@ -63,9 +63,6 @@ fun QuestionsScreen() {
 
             }
 
-
-
-
             Column {
                 McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO")
 

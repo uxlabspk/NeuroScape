@@ -1,7 +1,6 @@
 package io.github.uxlabspk.neuroscape.views.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
@@ -23,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +33,7 @@ fun McqsRadioButton(
     option4: String,
 ) {
     val optionsMcqs = listOf(option1, option2, option3,option4)
-    var optionState by remember { mutableStateOf("Hamza") }
+    var optionState by remember { mutableStateOf("") }
 
     Box (
         modifier = Modifier.fillMaxSize(),
@@ -47,7 +44,9 @@ fun McqsRadioButton(
 
         ) {
             optionsMcqs.forEach {
-                CustomRadioGroup(selected = optionState == it, title = it) {data->
+                CustomRadioGroup(
+                    selected = optionState == it,
+                    title = it) { data->
                     optionState = data
 
                 }
@@ -68,8 +67,9 @@ fun CustomRadioGroup(
     ) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(12.dp),
             shadowElevation = 4.dp,
+            contentColor = Color.Black,
             color = Color.LightGray,
             border = BorderStroke(
                 width = 2.dp,
@@ -82,10 +82,13 @@ fun CustomRadioGroup(
             ) {
                 Text(text = title ,
                     modifier = Modifier.padding(horizontal = 12.dp))
-                RadioButton(selected = selected,
-                    colors = RadioButtonDefaults.colors(Color(0xFF0080FF)),
+                RadioButton(
+//                    enabled = selected,
+                    selected = selected,
+                    colors = RadioButtonDefaults.colors(Color.Blue),
                     onClick = {
                     onValueChange(title)
+
                 })
             }
 
