@@ -75,7 +75,7 @@ fun PasswordInput(modifier: Modifier) {
         mutableStateOf(false)
     }
 
-    var icon =
+    val icon =
         if(passwordVisibility) painterResource(id = R.drawable.ic_visible)
         else painterResource(id = R.drawable.ic_invisible)
 

@@ -44,7 +44,7 @@ fun ProfileScreen(
                 contentDescription = "Profile Icon")
             Text(text = userName, fontSize = 26.sp)
             UserInput(text = userEmail, inputIcon = Icons.Default.Email,modifier = Modifier.padding(top = 60.dp), isEnabled = false)
-            AltButton(text = "Logout", modifier = Modifier.fillMaxWidth().padding(), {})
+            AltButton(text = "Logout", modifier = Modifier.fillMaxWidth().padding(top = 10.dp), {})
         }
     }
 }
