@@ -50,13 +50,15 @@ fun UserInput(
         },
         colors = TextFieldDefaults.colors(
             unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
             unfocusedLabelColor = Color.DarkGray,
             focusedLabelColor = Color.DarkGray,
             focusedLeadingIconColor = Color.Black,
             focusedTextColor = Color.Black,
             unfocusedTextColor = Color.DarkGray,
-            focusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
             focusedContainerColor = Color.LightGray,
+
             cursorColor = Color.Black
         ),
         shape = RoundedCornerShape(5.dp),
