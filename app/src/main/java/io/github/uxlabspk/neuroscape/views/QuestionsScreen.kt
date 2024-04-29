@@ -1,6 +1,8 @@
 package io.github.uxlabspk.neuroscape.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,23 +43,26 @@ fun QuestionsScreen() {
             }
 
             Column (
-                Modifier.fillMaxHeight(9/10f)
+                Modifier.fillMaxHeight(9/10f).padding(top = 10.dp)
             ) {
                 McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO", option5 = "Killer")
 
             }
 
-            Row {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 NavigationButton(
                     text = "Previous",
-                    modifier = Modifier.fillMaxWidth(1 / 2f),
+                    modifier = Modifier.width(130.dp),
                     isNext = false,
                     {}
                 )
                 NavigationButton(
                     text = "Next",
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.width(130.dp),
                     isNext = true,
                     {}
                 )
