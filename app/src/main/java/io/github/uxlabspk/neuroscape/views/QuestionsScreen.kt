@@ -48,25 +48,25 @@ fun QuestionsScreen() {
             }
 
             Column (
-                Modifier.fillMaxHeight(9/10f).padding(top = 10.dp)
+                Modifier.fillMaxHeight(8/9f).padding(top = 10.dp)
             ) {
                 McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO", option5 = "Killer")
             }
 
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().padding(bottom = 15.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
                 NavigationButton(
                     text = "Previous",
-                    modifier = Modifier.width(130.dp),
+                    modifier = Modifier.width(150.dp),
                     isNext = false,
                     {}
                 )
                 NavigationButton(
                     text = "Next",
-                    modifier = Modifier.width(130.dp),
+                    modifier = Modifier.width(150.dp),
                     isNext = true,
                     {}
                 )
