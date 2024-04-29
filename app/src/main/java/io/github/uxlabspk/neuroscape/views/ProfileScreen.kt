@@ -3,7 +3,9 @@ package io.github.uxlabspk.neuroscape.views
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import io.github.uxlabspk.neuroscape.views.components.UserInput
 
@@ -25,17 +28,23 @@ fun ProfileScreen(
 ){
     Column(
         modifier = Modifier
-            .padding(vertical = 20.dp)
             .fillMaxSize()
     ) {
         TopBar(text = "Profile", modifier = Modifier, {})
         Column (
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Profile Icon")
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                modifier = Modifier
+                    .height(120.dp)
+                    .width(120.dp)
+                    .padding(top = 20.dp),
+                contentDescription = "Profile Icon")
             Text(text = userName, fontSize = 26.sp)
-            UserInput(text = userEmail, inputIcon = Icons.Default.Email, modifier = Modifier.padding(vertical = 20.dp, horizontal = 12.dp), isEnabled = false)
+            UserInput(text = userEmail, inputIcon = Icons.Default.Email,modifier = Modifier.padding(top = 60.dp), isEnabled = false)
+            AltButton(text = "Logout", modifier = Modifier.fillMaxWidth().padding(), {})
         }
     }
 }
