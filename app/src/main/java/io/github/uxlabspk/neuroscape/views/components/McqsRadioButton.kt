@@ -1,6 +1,7 @@
 package io.github.uxlabspk.neuroscape.views.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
+import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 
 @Composable
 fun McqsRadioButton(
@@ -68,9 +70,9 @@ fun CustomRadioGroup(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            shadowElevation = 4.dp,
+            shadowElevation = 0.dp,
             contentColor = Color.Black,
-            color = Color.LightGray,
+            color = OffWhiteColor,
             border = BorderStroke(
                 width = 2.dp,
                 color = if (selected) BlueColor else Color.Transparent
@@ -90,9 +92,7 @@ fun CustomRadioGroup(
 
                 })
             }
-
         }
-
     }
 }
 
