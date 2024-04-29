@@ -32,13 +32,15 @@ import io.github.uxlabspk.neuroscape.R
 fun UserInput(
     text: String,
     inputIcon: ImageVector,
-    modifier: Modifier
+    modifier: Modifier,
+    isEnabled: Boolean
 ) {
     var textState by remember {
         mutableStateOf("")
     }
 
     TextField(
+        enabled = isEnabled,
         value = textState,
         onValueChange = { textState = it},
         modifier = modifier,
@@ -127,6 +129,6 @@ fun PasswordInputPreview() {
 @Preview
 @Composable
 fun PreviewTextField () {
-    UserInput(text = "Username", inputIcon = Icons.Default.Email, Modifier)
+    UserInput(text = "Username", inputIcon = Icons.Default.Email, Modifier, isEnabled = true)
 
 }

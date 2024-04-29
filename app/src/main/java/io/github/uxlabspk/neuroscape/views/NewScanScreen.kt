@@ -44,7 +44,8 @@ fun NewScanScreen() {
                 text = "Enter report name...", inputIcon = Icons.Default.Star,
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = 4.dp),
+                isEnabled = true
             )
             PrimaryButton(text = "Start", modifier = Modifier.fillMaxWidth(), {})
 

@@ -48,12 +48,15 @@ fun SignupScreen() {
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
+                ,
+                isEnabled = true
             )
             UserInput(
                 text = "Enter your email...", inputIcon = Icons.Default.Email,
                 Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = 4.dp),
+                isEnabled = true
             )
             PasswordInput(
                 Modifier
