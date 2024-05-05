@@ -40,7 +40,7 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            UserInfo(Modifier.background(OffWhiteColor), "prog_naveed", "April 20, 1999")
+            UserInfo(Modifier.background(OffWhiteColor), "prog_naveed", "April 20, 1999", { navController.navigate("profile") })
             Row(
                 Modifier
                     .padding(top = 10.dp)

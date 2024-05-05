@@ -45,11 +45,12 @@ import io.github.uxlabspk.neuroscape.ui.theme.RedColor
 
 
 @Composable
-fun UserInfo(modifier: Modifier, username: String, time: String) {
+fun UserInfo(modifier: Modifier, username: String, time: String, onClick: () -> Unit) {
     Surface(
+        onClick,
         Modifier
             .clip(RoundedCornerShape(8.dp))
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = modifier.padding(12.dp),
@@ -108,19 +109,6 @@ fun RecentScans(
             }
         }
     }
-}
-
-
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
-@Composable
-fun TestsPreview() {
-    RecentScans(scanTitle = "sdf", scanScore = 3, isAutismTrait = true, modifier = Modifier)
-}
-
-@Preview
-@Composable
-fun PreviewUserInfo() {
-    UserInfo(Modifier, "prog", "April 20, 2021")
 }
 
 
