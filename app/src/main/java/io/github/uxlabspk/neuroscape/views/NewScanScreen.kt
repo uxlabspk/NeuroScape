@@ -34,7 +34,7 @@ fun NewScanScreen(
     navController: NavController,
 ) {
     Column(Modifier.background(Color.White)) {
-        TopBar(text = "New Scan", modifier = Modifier.height(54.dp), {})
+        TopBar(text = "New Scan", modifier = Modifier.height(54.dp), { navController.navigateUp() })
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -50,7 +50,7 @@ fun NewScanScreen(
                     .padding(vertical = 4.dp),
                 isEnabled = true
             )
-            PrimaryButton(text = "Start", modifier = Modifier.fillMaxWidth(), {})
+            PrimaryButton(text = "Start", modifier = Modifier.fillMaxWidth(), { navController.navigate("questionsScreen")})
 
         }
     }

@@ -34,7 +34,7 @@ fun HomeScreen(
     Column(
         Modifier.background(Color.White)
     ) {
-        TopBar(text = "Home", modifier = Modifier.height(54.dp), {})
+        TopBar(text = "Home", modifier = Modifier.height(54.dp), {navController.navigateUp()})
         Column(
             Modifier
                 .padding(horizontal = 20.dp)
@@ -47,8 +47,8 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AltButton("All Scans", Modifier, {})
-                PrimaryButton("New Scans", Modifier, {})
+                AltButton("All Scans", Modifier, { })
+                PrimaryButton("New Scans", Modifier, { navController.navigate("newscan")})
             }
             Text("Resents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             LazyColumn {

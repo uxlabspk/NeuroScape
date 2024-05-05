@@ -34,7 +34,7 @@ fun LoginScreen(
     navController: NavController,
 ) {
     Column(Modifier.background(Color.White)) {
-        TopBar(text = "Login", modifier = Modifier.height(54.dp), {})
+        TopBar(text = "Login", modifier = Modifier.height(54.dp), { navController.navigateUp() })
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -59,7 +59,7 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             )
-            PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth(), {})
+            PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth(), { navController.navigate("home")})
             Row(
                 modifier = Modifier.height(34.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -67,7 +67,7 @@ fun LoginScreen(
             ) {
                 Text("Don't have an account? ")
                 TextButton(
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate("signup") }
                 ) {
                     Text("Create Account")
                 }
