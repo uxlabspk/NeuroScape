@@ -23,16 +23,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    NeuroScapeNavHost()
                 }
             }
         }
     }
 }
-
-
-//NavHost(navController = navController, startDestination = "screen1") {
-//    composable("screen1") { Screen1(navController) }
-//    composable("screen2") { Screen2(navController) }
-//    // Define more destinations as needed
-//}

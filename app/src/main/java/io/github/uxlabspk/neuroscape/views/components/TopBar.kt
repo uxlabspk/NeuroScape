@@ -30,7 +30,7 @@ fun TopBar(text: String, modifier: Modifier, onClick: () -> Unit) {
         shadowElevation = 3.dp
     ) {
         Row(
-            modifier.padding(horizontal = 20.dp),
+            modifier.padding(horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
