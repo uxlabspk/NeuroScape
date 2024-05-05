@@ -40,7 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
+import io.github.uxlabspk.neuroscape.data.User
 
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
@@ -200,6 +202,8 @@ fun SignupScreen(
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
+                            var user = User(username , email)
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user)
                             Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
                             navController.navigate("home")
                         } else {
