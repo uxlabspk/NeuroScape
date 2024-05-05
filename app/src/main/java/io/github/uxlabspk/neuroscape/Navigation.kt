@@ -58,5 +58,6 @@ fun NeuroScapeNavHost(
             ProfileScreen(navController = navController, userName = "Hamza", userEmail = "codehuntspk@gmail.com")
         }
 
+
     }
 }
