@@ -5,8 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
+import io.github.uxlabspk.neuroscape.views.HomeScreen
 import io.github.uxlabspk.neuroscape.views.IntroScreen
 import io.github.uxlabspk.neuroscape.views.LoginScreen
+import io.github.uxlabspk.neuroscape.views.NewScanScreen
+import io.github.uxlabspk.neuroscape.views.ProfileScreen
+import io.github.uxlabspk.neuroscape.views.QuestionsScreen
+import io.github.uxlabspk.neuroscape.views.ScanResults
+import io.github.uxlabspk.neuroscape.views.SignupScreen
 
 
 /*
@@ -32,6 +38,24 @@ fun NeuroScapeNavHost(
         }
         composable("signin") {
             LoginScreen(navController = navController)
+        }
+        composable("signup") {
+            SignupScreen(navController = navController)
+        }
+        composable("home") {
+            HomeScreen(navController = navController)
+        }
+        composable("newscan") {
+            NewScanScreen(navController = navController)
+        }
+        composable("questionsScreen") {
+            QuestionsScreen(navController = navController)
+        }
+        composable("result") {
+            ScanResults(navController = navController, isAutismTraits = false)
+        }
+        composable("profile") {
+            ProfileScreen(navController = navController, userName = "Hamza", userEmail = "codehuntspk@gmail.com")
         }
 
     }
