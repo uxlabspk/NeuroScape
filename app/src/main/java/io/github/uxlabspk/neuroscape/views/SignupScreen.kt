@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.R
-import io.github.uxlabspk.neuroscape.views.components.PasswordInput
+
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import io.github.uxlabspk.neuroscape.views.components.UserInput
@@ -52,20 +52,21 @@ fun SignupScreen(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
                 ,
-                isEnabled = true
+                isError = false
             )
             UserInput(
                 text = "Enter your email...", inputIcon = Icons.Default.Email,
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                isEnabled = true
+                isError = false
             )
-            PasswordInput(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+//            PasswordInput(
+//                Modifier
+//                    .fillMaxWidth()
+//                    .padding(vertical = 4.dp),
+//                isError = false
+//            )
             PrimaryButton(text = "Sign up", modifier = Modifier.fillMaxWidth(), {})
             Row(
                 modifier = Modifier.height(34.dp).fillMaxWidth(),

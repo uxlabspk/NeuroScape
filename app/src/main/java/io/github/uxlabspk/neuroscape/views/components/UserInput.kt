@@ -27,24 +27,23 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import io.github.uxlabspk.neuroscape.R
 
-
 @Composable
 fun UserInput(
     text: String,
     inputIcon: ImageVector,
     modifier: Modifier,
-    isEnabled: Boolean
+    isError: Boolean
 ) {
     var textState by remember {
         mutableStateOf("")
     }
 
     TextField(
-        enabled = isEnabled,
         value = textState,
         onValueChange = { textState = it},
         modifier = modifier,
         label = { Text(text) },
+        isError = isError,
         leadingIcon = {
             Icon(imageVector = inputIcon, contentDescription = "Email Icon")
         },
@@ -65,72 +64,4 @@ fun UserInput(
         singleLine = true,
 
     )
-}
-
-@Composable
-fun PasswordInput(modifier: Modifier) {
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var passwordVisibility by remember {
-        mutableStateOf(false)
-    }
-
-    val icon =
-        if(passwordVisibility) painterResource(id = R.drawable.ic_visible)
-        else painterResource(id = R.drawable.ic_invisible)
-
-    TextField(
-        modifier = modifier,
-        value = password,
-        onValueChange = {
-            password = it
-        },
-        label = { Text(text = "Password")},
-        leadingIcon = {
-            Icon(painter = painterResource(id = R.drawable.ic_password), contentDescription = "Password Icon")
-        },
-        trailingIcon = {
-            IconButton(onClick = {
-                passwordVisibility = !passwordVisibility
-            }) {
-                Icon(
-                    painter = icon,
-                    contentDescription = "visibility icon"
-                )
-            }
-        },
-        colors = TextFieldDefaults.colors(
-            unfocusedIndicatorColor = Color.Transparent,
-            unfocusedLabelColor = Color.DarkGray,
-            focusedLabelColor = Color.DarkGray,
-            focusedLeadingIconColor = Color.Black,
-            focusedTextColor = Color.Black,
-            unfocusedTextColor = Color.DarkGray,
-            focusedIndicatorColor = Color.Transparent,
-            focusedContainerColor = Color.LightGray,
-            cursorColor = Color.Black
-        ),
-        shape = RoundedCornerShape(5.dp),
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
-        ),
-        visualTransformation = if(passwordVisibility) VisualTransformation.None
-        else PasswordVisualTransformation()
-    )
-}
-
-@Preview
-@Composable
-fun PasswordInputPreview() {
-    PasswordInput(Modifier)
-}
-
-@Preview
-@Composable
-fun PreviewTextField () {
-    UserInput(text = "Username", inputIcon = Icons.Default.Email, Modifier, isEnabled = true)
-
 }
