@@ -34,7 +34,7 @@ fun ProfileScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        TopBar(text = "Profile", modifier = Modifier.height(56.dp), {})
+        TopBar(text = "Profile", modifier = Modifier.height(56.dp), { navController.navigateUp() })
         Column (
             modifier = Modifier
                 .fillMaxWidth()
@@ -50,8 +50,6 @@ fun ProfileScreen(
                 contentDescription = "Profile Icon")
             Text(text = userName, fontSize = 26.sp)
             Text(text = userEmail, fontSize = 16.sp)
-//            UserInput(text = userEmail, inputIcon = Icons.Default.Email,modifier = Modifier.padding(top = 60.dp), isEnabled = false)
-            //AltButton(text = "Logout", modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp), {})
             SecondaryButton("View Reports", modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 50.dp), {})

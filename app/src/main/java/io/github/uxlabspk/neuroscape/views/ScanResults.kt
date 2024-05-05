@@ -44,7 +44,7 @@ fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
         TopBar(text = "Sign in", modifier = Modifier
             .fillMaxWidth()
             .height(44.dp),
-            {}
+            { navController.navigateUp() }
         )
 
         Column(
@@ -71,7 +71,7 @@ fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
                 textAlign = TextAlign.Center
             )
 
-            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 120.dp), {})
+            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 120.dp), { navController.navigate("home") })
         }
     }
 

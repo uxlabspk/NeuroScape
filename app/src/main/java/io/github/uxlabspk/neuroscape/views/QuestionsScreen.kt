@@ -38,7 +38,7 @@ fun QuestionsScreen(
     Column(
         Modifier.background(Color.White)
     ) {
-        TopBar(text = "01/10", modifier = Modifier, {})
+        TopBar(text = "01/10", modifier = Modifier, { navController.navigateUp() })
         Column(
             Modifier
                 .padding(horizontal = 20.dp)

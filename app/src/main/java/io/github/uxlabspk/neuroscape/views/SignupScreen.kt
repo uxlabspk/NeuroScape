@@ -33,7 +33,7 @@ fun SignupScreen(
     navController: NavController,
 ) {
     Column(Modifier.background(Color.White)) {
-        TopBar(text = "Sign up", modifier = Modifier.height(54.dp), {})
+        TopBar(text = "Sign up", modifier = Modifier.height(54.dp), { navController.navigateUp() })
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -74,7 +74,7 @@ fun SignupScreen(
             ) {
                 Text("Already have an account? ")
                 TextButton(
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate("signin") }
                 ) {
                     Text("Sign In")
                 }
