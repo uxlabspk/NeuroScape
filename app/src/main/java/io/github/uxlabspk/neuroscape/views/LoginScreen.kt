@@ -166,13 +166,11 @@ fun LoginScreen(
 
             PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth()) {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password).addOnCompleteListener() { task ->
-                    run {
-                        if (task.isSuccessful) {
-                            Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
-                            navController.navigate("home")
-                        } else {
-                            Toast.makeText(context, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                        }
+                    if (task.isSuccessful) {
+                        Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
+                        navController.navigate("home")
+                    } else {
+                        Toast.makeText(context, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
