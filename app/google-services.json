@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1073991214732",
+    "project_id": "neuroscape-b6793",
+    "storage_bucket": "neuroscape-b6793.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073991214732:android:925e7aa171795d69b27da9",
+        "android_client_info": {
+          "package_name": "io.github.uxlabspk.neuroscape"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbGZDnFFhfhybMZN7bqGe3pWapLJtUyU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
