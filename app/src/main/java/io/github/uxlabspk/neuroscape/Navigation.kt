@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import io.github.uxlabspk.neuroscape.views.IntroScreen
+import io.github.uxlabspk.neuroscape.views.LoginScreen
 
 
 /*
@@ -27,7 +28,11 @@ fun NeuroScapeNavHost(
 ) {
     NavHost(navController = navController, startDestination = "Welcome") {
         composable("Welcome") {
-            IntroScreen("Autism", "Autism specturnm disorder (ASD) is underdevelopement condition characterized by challenges in social interaction, communication, and behaviour.")
+            IntroScreen(navController, "Autism", "Autism specturnm disorder (ASD) is underdevelopement condition characterized by challenges in social interaction, communication, and behaviour.")
         }
+        composable("signin") {
+            LoginScreen(navController = navController)
+        }
+
     }
 }
