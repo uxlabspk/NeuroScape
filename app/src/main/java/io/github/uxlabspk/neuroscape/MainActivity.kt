@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
 import io.github.uxlabspk.neuroscape.ui.theme.NeuroScapeTheme
 import io.github.uxlabspk.neuroscape.views.QuestionsScreen
 
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    QuestionsScreen()
+
                 }
             }
         }
