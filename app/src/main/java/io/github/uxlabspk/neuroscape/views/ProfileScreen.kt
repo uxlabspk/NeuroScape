@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.uxlabspk.neuroscape.views.components.AltButton
-import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.SecondaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import io.github.uxlabspk.neuroscape.views.components.UserInput
+
 
 @Composable
 fun ProfileScreen(
@@ -53,7 +50,9 @@ fun ProfileScreen(
             Text(text = userEmail, fontSize = 16.sp)
 //            UserInput(text = userEmail, inputIcon = Icons.Default.Email,modifier = Modifier.padding(top = 60.dp), isEnabled = false)
             //AltButton(text = "Logout", modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp), {})
-            SecondaryButton("View Reports", modifier = Modifier.fillMaxWidth().padding(top = 50.dp), {})
+            SecondaryButton("View Reports", modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 50.dp), {})
             SecondaryButton("Logout", modifier = Modifier.fillMaxWidth(), {})
         }
     }
