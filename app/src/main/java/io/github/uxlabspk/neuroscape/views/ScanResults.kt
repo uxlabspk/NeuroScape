@@ -17,11 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 @Composable
-fun ScanResults(isAutismTraits: Boolean) {
+fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
     var icon:String
     var heading: String
     var subheading:String
@@ -74,11 +75,4 @@ fun ScanResults(isAutismTraits: Boolean) {
         }
     }
 
-}
-
-
-@Preview(showBackground = true, widthDp = 330, heightDp = 800)
-@Composable
-fun ScanResultsPreview() {
-    ScanResults(false)
 }

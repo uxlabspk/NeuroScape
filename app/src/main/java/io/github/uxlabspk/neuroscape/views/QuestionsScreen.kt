@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.McqsRadioButton
@@ -31,7 +32,9 @@ import io.github.uxlabspk.neuroscape.views.components.NavigationButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 @Composable
-fun QuestionsScreen() {
+fun QuestionsScreen(
+    navController: NavController,
+) {
     Column(
         Modifier.background(Color.White)
     ) {
@@ -74,10 +77,4 @@ fun QuestionsScreen() {
             }
         }
     }
-}
-
-@Preview(showBackground = true, widthDp = 330, heightDp = 800)
-@Composable
-fun PreviewQuestionsScreen() {
-    QuestionsScreen()
 }

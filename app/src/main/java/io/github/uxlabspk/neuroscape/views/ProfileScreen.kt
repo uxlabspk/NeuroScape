@@ -18,12 +18,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.views.components.SecondaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 
 @Composable
 fun ProfileScreen(
+    navController: NavController,
     userName: String,
     userEmail: String
 ){
@@ -56,10 +58,4 @@ fun ProfileScreen(
             SecondaryButton("Logout", modifier = Modifier.fillMaxWidth(), {})
         }
     }
-}
-
-@Preview(showBackground = true, widthDp = 430, heightDp = 880)
-@Composable
-fun PreviewProfile(){
-    ProfileScreen(userName = "Hamza Waheed", userEmail = "Hamzawaheed057@gmail.com")
 }

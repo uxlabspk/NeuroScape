@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.AltButton
@@ -27,7 +28,9 @@ import io.github.uxlabspk.neuroscape.views.components.TopBar
 import io.github.uxlabspk.neuroscape.views.components.UserInfo
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController,
+) {
     Column(
         Modifier.background(Color.White)
     ) {
@@ -58,8 +61,3 @@ fun HomeScreen() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 330, heightDp = 800)
-@Composable
-fun PreviewHomeScreen() {
-    HomeScreen()
-}

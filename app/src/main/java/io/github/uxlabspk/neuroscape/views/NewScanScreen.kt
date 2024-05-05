@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.views.components.PasswordInput
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
@@ -29,7 +30,9 @@ import io.github.uxlabspk.neuroscape.views.components.TopBar
 import io.github.uxlabspk.neuroscape.views.components.UserInput
 
 @Composable
-fun NewScanScreen() {
+fun NewScanScreen(
+    navController: NavController,
+) {
     Column(Modifier.background(Color.White)) {
         TopBar(text = "New Scan", modifier = Modifier.height(54.dp), {})
         Column(
@@ -53,8 +56,3 @@ fun NewScanScreen() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 330, heightDp = 800)
-@Composable
-fun PreviewNewScanScreen() {
-    NewScanScreen()
-}
