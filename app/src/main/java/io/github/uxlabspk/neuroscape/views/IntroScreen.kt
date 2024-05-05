@@ -17,11 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.SecondaryButton
 
 @Composable
-fun IntroScreen(heading: String, subheading: String) {
+fun IntroScreen(navController: NavController, heading: String, subheading: String) {
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -46,11 +47,4 @@ fun IntroScreen(heading: String, subheading: String) {
             SecondaryButton("Signup", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), {})
         }
     }
-}
-
-
-@Preview(showBackground = true, widthDp = 330, heightDp = 800)
-@Composable
-fun IntroScreenPreview() {
-    IntroScreen("Autism", "Autism specturnm disorder (ASD) is underdevelopement condition characterized by challenges in social interaction, communication, and behaviour.")
 }
