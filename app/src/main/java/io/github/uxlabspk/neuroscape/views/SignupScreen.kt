@@ -1,8 +1,6 @@
 package io.github.uxlabspk.neuroscape.views
 
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,11 +46,8 @@ import io.github.uxlabspk.neuroscape.data.User
 
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Date
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SignupScreen(
     navController: NavController,
@@ -134,7 +129,7 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your email...") },
+                label = { Text("Enter your name...") },
                 isError = isEmailError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
@@ -162,7 +157,9 @@ fun SignupScreen(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                },
                 isError = isPasswordError,
                 label = { Text(text = "Password") },
                 leadingIcon = {
@@ -206,8 +203,7 @@ fun SignupScreen(
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
 
-                            val date: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                            var user = User(username , email, date)
+                            var user = User(username , email, Date().toString())
                             FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user)
                             Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
                             navController.navigate("home")
