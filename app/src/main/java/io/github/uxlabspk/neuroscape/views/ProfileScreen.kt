@@ -86,7 +86,13 @@ fun ProfileScreen(
                 .padding(top = 50.dp), ) { navController.navigate("home")}
             SecondaryButton("Logout", modifier = Modifier.fillMaxWidth(), ){
                 FirebaseAuth.getInstance().signOut()
-                navController.navigate("Welcome")
+                navController.addOnDestinationChangedListener { controller, destination, _ ->
+                    if(destination.route == "profile") {
+                        if (FirebaseAuth.getInstance().currentUser == null) {
+                            controller.navigate("Welcome")
+                        }
+                    }
+                }
             }
         }
     }
