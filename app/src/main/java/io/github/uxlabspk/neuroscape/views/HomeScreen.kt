@@ -1,5 +1,6 @@
 package io.github.uxlabspk.neuroscape.views
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,21 +23,57 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 import io.github.uxlabspk.neuroscape.R
+import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.RecentScans
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import io.github.uxlabspk.neuroscape.views.components.UserInfo
+import java.time.LocalDate
+import java.util.Date
+
+fun getUser() {
+
+}
 
 @Composable
 fun HomeScreen(
     navController: NavController,
 ) {
+    var user by remember { mutableStateOf<User?>(null) }
+
+    val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
+    val uuid = FirebaseAuth.getInstance().currentUser?.uid
+
+    ref.child(uuid.toString()).child("Profile").addValueEventListener(object: ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (snapshot.exists()) {
+                user = snapshot.getValue(User::class.java)
+            } else {
+                Log.d("TAG", "Invalid Snapshot")
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+
+    })
+
+
 
 
     Column(
@@ -46,11 +87,7 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-
-            // .child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user)
-            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile")
-
-            UserInfo(Modifier.background(OffWhiteColor), "prog_naveed", "April 20, 1999") {
+            UserInfo(Modifier.background(OffWhiteColor), user?.userName.toString(), user?.lastScan.toString()) {
                 navController.navigate("profile")
             }
             Row(
@@ -59,7 +96,10 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AltButton("All Scans", Modifier, { })
+                AltButton("All Scans", Modifier) {
+                    FirebaseAuth.getInstance().signOut()
+                    navController.navigate("Welcome")
+                }
                 PrimaryButton("New Scans", Modifier, { navController.navigate("newscan")})
             }
             Text("Resents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)

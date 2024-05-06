@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
+import com.google.firebase.auth.FirebaseAuth
 import io.github.uxlabspk.neuroscape.views.HomeScreen
 import io.github.uxlabspk.neuroscape.views.IntroScreen
 import io.github.uxlabspk.neuroscape.views.LoginScreen
@@ -32,7 +33,12 @@ import io.github.uxlabspk.neuroscape.views.SignupScreen
 fun NeuroScapeNavHost(
     navController: NavHostController = rememberNavController()
 ) {
-    NavHost(navController = navController, startDestination = "Welcome") {
+
+    var startScreen = if (FirebaseAuth.getInstance().currentUser != null) "home" else "Welcome"
+
+
+
+    NavHost(navController = navController, startDestination = startScreen) {
         composable("Welcome") {
             IntroScreen(navController, "Autism", "Autism specturnm disorder (ASD) is underdevelopement condition characterized by challenges in social interaction, communication, and behaviour.")
         }
