@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.AltButton
@@ -31,16 +33,26 @@ import io.github.uxlabspk.neuroscape.views.components.UserInfo
 fun HomeScreen(
     navController: NavController,
 ) {
+
+
     Column(
         Modifier.background(Color.White)
     ) {
-        TopBar(text = "Home", modifier = Modifier.height(54.dp), {navController.navigateUp()})
+        TopBar(text = "Home", modifier = Modifier.height(54.dp)) {
+            navController.navigateUp()
+        }
         Column(
             Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            UserInfo(Modifier.background(OffWhiteColor), "prog_naveed", "April 20, 1999", { navController.navigate("profile") })
+
+            // .child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user)
+            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile")
+
+            UserInfo(Modifier.background(OffWhiteColor), "prog_naveed", "April 20, 1999") {
+                navController.navigate("profile")
+            }
             Row(
                 Modifier
                     .padding(top = 10.dp)
