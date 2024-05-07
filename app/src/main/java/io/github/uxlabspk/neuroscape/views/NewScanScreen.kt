@@ -99,7 +99,7 @@ fun NewScanScreen(
                 )
             PrimaryButton(text = "Start", modifier = Modifier.fillMaxWidth()) {
                 val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                val scanReport = ScanReports(reportName, date, null, null)
+                val scanReport = ScanReports(reportName, date, "", "")
                 FirebaseDatabase.getInstance().getReference().child("Users").child(uid.toString()).child("Reports").child(System.currentTimeMillis().toString()).setValue(scanReport).addOnSuccessListener {
                     navController.navigate("questionsScreen")
                 }.addOnFailureListener {
