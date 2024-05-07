@@ -38,9 +38,7 @@ import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 @Composable
 fun ProfileScreen(
-    navController: NavController,
-    userName: String,
-    userEmail: String
+    navController: NavController
 ){
     var user by remember { mutableStateOf <User?> (null) }
     val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
@@ -54,9 +52,7 @@ fun ProfileScreen(
                 Log.d("Error", "Invalid snapshot")
             }
         }
-        override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
-        }
+        override fun onCancelled(error: DatabaseError) {}
     })
 
 

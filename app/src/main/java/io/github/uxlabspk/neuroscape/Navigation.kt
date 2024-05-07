@@ -33,14 +33,11 @@ import io.github.uxlabspk.neuroscape.views.SignupScreen
 fun NeuroScapeNavHost(
     navController: NavHostController = rememberNavController()
 ) {
-
-    var startScreen = if (FirebaseAuth.getInstance().currentUser != null) "home" else "Welcome"
-
-
+    val startScreen = if (FirebaseAuth.getInstance().currentUser != null) "home" else "Welcome"
 
     NavHost(navController = navController, startDestination = startScreen) {
         composable("Welcome") {
-            IntroScreen(navController, "Autism", "Autism specturnm disorder (ASD) is underdevelopement condition characterized by challenges in social interaction, communication, and behaviour.")
+            IntroScreen(navController, "Autism", "Autism spectrum disorder (ASD) is underdevelopment condition characterized by challenges in social interaction, communication, and behaviour.")
         }
         composable("signin") {
             LoginScreen(navController = navController)
@@ -61,9 +58,7 @@ fun NeuroScapeNavHost(
             ScanResults(navController = navController, isAutismTraits = false)
         }
         composable("profile") {
-            ProfileScreen(navController = navController, userName = "Hamza", userEmail = "codehuntspk@gmail.com")
+            ProfileScreen(navController = navController)
         }
-
-
     }
 }
