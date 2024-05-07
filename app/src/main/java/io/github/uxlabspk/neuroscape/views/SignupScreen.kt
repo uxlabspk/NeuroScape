@@ -1,6 +1,9 @@
 package io.github.uxlabspk.neuroscape.views
 
+import android.os.Build
+import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,9 +39,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
@@ -46,8 +49,10 @@ import io.github.uxlabspk.neuroscape.data.User
 
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import java.util.Date
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SignupScreen(
     navController: NavController,
@@ -202,13 +207,20 @@ fun SignupScreen(
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
-
-                            var user = User(username , email, Date().toString())
-                            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user)
-                            Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
-                            navController.navigate("home")
+                            val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                            var user = User(username , email, date)
+                            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user).addOnSuccessListener {
+                                navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+                                    if (navDestination.route == "signup") {
+                                        Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
+                                        navController.navigate("home")
+                                    }
+                                }
+                            }.addOnFailureListener {
+                                Toast.makeText(context, "Something went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                            }
                         } else {
-                            Toast.makeText(context, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Something went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
             }

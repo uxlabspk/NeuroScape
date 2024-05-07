@@ -168,7 +168,11 @@ fun LoginScreen(
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password).addOnCompleteListener() { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
-                        navController.navigate("home")
+                        navController.addOnDestinationChangedListener { controller, destination, _ ->
+                            if(destination.route == "signin") {
+                                controller.navigate("home")
+                            }
+                        }
                     } else {
                         Toast.makeText(context, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
