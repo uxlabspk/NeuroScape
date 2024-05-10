@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -27,6 +30,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.github.uxlabspk.neuroscape.data.ScanReports
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.AltButton
@@ -41,6 +45,9 @@ fun HomeScreen(
     navController: NavController,
 ) {
     var user by remember { mutableStateOf<User?>(null) }
+    var reports by remember { mutableStateOf<ScanReports?>(null) }
+
+
 
     val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
     val uuid = FirebaseAuth.getInstance().currentUser?.uid
@@ -58,8 +65,9 @@ fun HomeScreen(
 
     })
 
+
     Column(
-        Modifier.background(Color.White)
+        Modifier.background(Color.White).fillMaxSize()
     ) {
         TopBar(text = "Home", modifier = Modifier.height(54.dp)) {
             navController.navigateUp()
@@ -79,19 +87,28 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AltButton("All Scans", Modifier) {
-                    FirebaseAuth.getInstance().signOut()
-                    navController.navigate("Welcome")
+                    navController.navigate("allscans")
                 }
                 PrimaryButton("New Scans", Modifier, { navController.navigate("newscan")})
             }
-            Text("Resents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
-            LazyColumn {
-                items(4) { item ->
-                    RecentScans("sdf", 3, true, Modifier.background(OffWhiteColor))
-                }
-            }
+            Text("Recents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
 
+            ref.child(uuid.toString()).child("Reports").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for(dataSnapshot in snapshot.children) {
+                        reports = dataSnapshot.getValue(ScanReports::class.java)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+
+                RecentScans("${reports?.reportName}", "${reports?.reportResult}", Modifier.background(OffWhiteColor))
+            }
         }
     }
-}
+
 

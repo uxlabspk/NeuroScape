@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
+import io.github.uxlabspk.neuroscape.views.AllScans
 import io.github.uxlabspk.neuroscape.views.HomeScreen
 import io.github.uxlabspk.neuroscape.views.IntroScreen
 import io.github.uxlabspk.neuroscape.views.LoginScreen
@@ -47,6 +48,9 @@ fun NeuroScapeNavHost(
         }
         composable("home") {
             HomeScreen(navController = navController)
+        }
+        composable("allscans") {
+            AllScans(navController = navController)
         }
         composable("newscan") {
             NewScanScreen(navController = navController)

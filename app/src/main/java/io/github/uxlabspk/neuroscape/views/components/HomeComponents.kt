@@ -42,6 +42,7 @@ import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.ui.theme.RedColor
+import java.util.Locale
 
 
 @Composable
@@ -74,12 +75,14 @@ fun UserInfo(modifier: Modifier, username: String, time: String, onClick: () -> 
 @Composable
 fun RecentScans(
     scanTitle: String,
-    scanScore: Int,
-    isAutismTrait: Boolean,
+    scanScore: String,
     modifier: Modifier
 ) {
-    val color = if (isAutismTrait) RedColor else Color.Transparent
-    val text = if (isAutismTrait) "ASD" else ""
+    val isAutismTrait = scanScore >= "3"
+
+    val color = if (isAutismTrait) RedColor else Color.Green
+    val text = if (isAutismTrait) "ASD" else "No ASD"
+    val textColor = if (isAutismTrait) Color.White else Color.Black
 
     Surface (
         Modifier
@@ -105,7 +108,7 @@ fun RecentScans(
                     .padding(5.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text, color = Color.White)
+                Text(text, color = textColor)
             }
         }
     }
