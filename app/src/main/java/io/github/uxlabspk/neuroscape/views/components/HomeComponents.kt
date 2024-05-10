@@ -78,7 +78,7 @@ fun RecentScans(
     scanScore: String,
     modifier: Modifier
 ) {
-    val isAutismTrait = scanScore >= "3"
+    val isAutismTrait = scanScore > "3"
 
     val color = if (isAutismTrait) RedColor else Color.Green
     val text = if (isAutismTrait) "ASD" else "No ASD"

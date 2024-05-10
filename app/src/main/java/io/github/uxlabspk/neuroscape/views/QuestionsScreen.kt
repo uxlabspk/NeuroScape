@@ -45,48 +45,48 @@ fun QuestionsScreen(
     navController: NavController,
 ) {
     var index by remember { mutableStateOf(0) }
-    val contents = listOf(
-        "Content 1",
-        "Content 2",
-        "Content 3",
-        "Content 4",
-        "Content 5",
-        "Content 6",
-        "Content 7",
-        "Content 8",
-        "Content 9",
-        "Content 10",
+
+    var questionsList = listOf(
+        "Does your child look at you when you call his/her name?",
+        "How easy is it for you to get eye contact with your child?",
+        "Does your child point to indicate that s/he wants something? (e.g. a toy that is out of reach)",
+        "Does your child point to share interest with you? (e.g. pointing at an interesting sight)",
+        "Does your child pretend? (e.g. care for dolls, talk on a toy phone)",
+        "Does your child follow where you’re looking?",
+        "If you or someone else in the family is visibly upset, does your child show signs of wanting to comfort them? (e.g. stroking hair, hugging them)",
+        "Would you describe your child’s first words as:",
+        "Does your child use simple gestures? (e.g. wave goodbye)",
+        "Does your child stare at nothing with no apparent purpose?",
     )
 
-    val back = { index = (index - 1 + contents.size) % contents.size }
-    val next = { index = (index + 1) % contents.size }
+    val back = { index = (index - 1 + questionsList.size) % questionsList.size }
+    var next = if (index == 9) {
+        { navController.navigate("result") }
+    } else {
+        { index = (index + 1) % questionsList.size }
+    }
 
-    MainScreen(navController, contents[index], index, next, back)
+    //if (index < 9) reset = true
+
+    MainScreen(navController, questionsList[index], index, next, back)
 }
 
 
 @Composable
 fun MainScreen(
-    navController: NavController, questions: String, questionsIndex: Int, onNextClicked: () -> Unit, onBackClicked: () -> Unit
+    navController: NavController,
+    questions: String,
+    questionsIndex: Int,
+    onNextClicked: () -> Unit,
+    onBackClicked: () -> Unit
 ) {
     val nextText = if (questionsIndex == 9) "Generate Report" else "Next"
 
     // val btnOnClick = if (next_Text == "Next") {onNextClicked} else { navController.navigate("home") }
-    var questionsList: List<String> = listOf(
-        "Does your child look at you when you call his/her name?",
-        "How easy is it for you to get eye contact with your child?",
-        "Does your child point to indicate that s/he wants something? (e.g. a toy that is\n" +
-                "out of reach)",
-        "Does your child point to share interest with you? (e.g. pointing at an\n" +
-                "interesting sight)",
-        "Does your child pretend? (e.g. care for dolls, talk on a toy phone)\n" +
-                "Does your child follow where you’re looking?",
-        "If you or someone else in the family is visibly upset, does your child show signs\n" +
-                "of wan9ng to comfort them? (e.g. stroking hair, hugging them)",
-        "Would you describe your child’s first words as:",
-        "Does your child use simple gestures? (e.g. wave goodbye)",
-        "Does your child stare at nothing with no apparent purpose?",
-    )
+
+    var answersList = mutableMapOf<String, String>()
+
+//        answerList.put("key2", "value2")
 
     Column(
         Modifier.background(Color.White)
@@ -113,7 +113,7 @@ fun MainScreen(
                     .fillMaxHeight(8 / 9f)
                     .padding(top = 10.dp)
             ) {
-                McqsRadioButton(option1 = "Hamza", option2 = "Naveed", option3 = "CEO", option4 = "CTO", option5 = "Killer")
+                McqsRadioButton(option1 = "Always", option2 = "Usually", option3 = "Sometimes", option4 = "Rarly", option5 = "Never")
             }
 
             Row(

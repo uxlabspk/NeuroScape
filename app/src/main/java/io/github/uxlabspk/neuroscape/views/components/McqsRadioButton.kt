@@ -96,10 +96,3 @@ fun CustomRadioGroup(
     }
 }
 
-@Preview
-@Composable
-fun McqsPreview() {
-    McqsRadioButton(option1 = "Hamza Waheed", option2 = "Naveed", option3 = "CEO", option4 = "CTO", option5 = "sdf")
-
-}
-
