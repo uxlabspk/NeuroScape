@@ -72,6 +72,10 @@ fun MainScreen(
     val nextText = if (questionsIndex == 9) "Generate Report" else "Next"
 
     // val btnOnClick = if (next_Text == "Next") {onNextClicked} else { navController.navigate("home") }
+    var questionsList: List<String> = listOf(
+        "sdf",
+        "SDf"
+    )
 
     Column(
         Modifier.background(Color.White)
