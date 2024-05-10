@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.github.uxlabspk.neuroscape.data.ScanReports
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.AltButton
@@ -41,7 +42,9 @@ fun HomeScreen(
     navController: NavController,
 ) {
     var user by remember { mutableStateOf<User?>(null) }
-
+    var reports by remember {
+        mutableStateOf<ScanReports?>(null)
+    }
     val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
     val uuid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -56,6 +59,36 @@ fun HomeScreen(
 
         override fun onCancelled(error: DatabaseError) {}
 
+    })
+//    ref.child(uuid.toString()).child("Reports").child("1715086729691").addValueEventListener(object : ValueEventListener {
+//        override fun onDataChange(snapshot: DataSnapshot) {
+//            if (snapshot.exists()){
+//                reports = snapshot.getValue(ScanReports::class.java)
+//            } else {
+//                Log.d("Tag", "Invalid Snapshot")
+//            }
+//        }
+//
+//        override fun onCancelled(error: DatabaseError) {
+//            TODO("Not yet implemented")
+//        }
+//    })
+
+
+    ref.child(uuid.toString()).child("Reports").addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (snapshot.exists()){
+                val reportID = snapshot.key
+                Log.d("Tag", "${reportID}")
+                reports = snapshot.getValue(ScanReports::class.java)
+            } else {
+                Log.d("Tag", "Invalid Snapshot")
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
     })
 
     Column(
@@ -87,10 +120,9 @@ fun HomeScreen(
             Text("Resents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
             LazyColumn {
                 items(4) { item ->
-                    RecentScans("sdf", 3, true, Modifier.background(OffWhiteColor))
+                    RecentScans("${reports?.reportName}", 3, true, Modifier.background(OffWhiteColor))
                 }
             }
-
         }
     }
 }

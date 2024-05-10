@@ -209,7 +209,14 @@ fun SignupScreen(
                         if (task.isSuccessful) {
                             val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
                             var user = User(username , email, date)
-                            FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().uid.toString()).child("Profile").setValue(user).addOnSuccessListener {
+                            FirebaseDatabase.getInstance().getReference()
+                                .child("Users")
+                                .child(FirebaseAuth
+                                    .getInstance()
+                                    .uid.toString())
+                                .child("Profile")
+                                .setValue(user)
+                                .addOnSuccessListener {
                                 navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
                                     if (navDestination.route == "signup") {
                                         Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
@@ -217,10 +224,10 @@ fun SignupScreen(
                                     }
                                 }
                             }.addOnFailureListener {
-                                Toast.makeText(context, "Something went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Something abc went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            Toast.makeText(context, "Something went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Something ghv went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
             }
