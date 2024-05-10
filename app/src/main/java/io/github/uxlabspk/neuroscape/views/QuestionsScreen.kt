@@ -73,8 +73,19 @@ fun MainScreen(
 
     // val btnOnClick = if (next_Text == "Next") {onNextClicked} else { navController.navigate("home") }
     var questionsList: List<String> = listOf(
-        "sdf",
-        "SDf"
+        "Does your child look at you when you call his/her name?",
+        "How easy is it for you to get eye contact with your child?",
+        "Does your child point to indicate that s/he wants something? (e.g. a toy that is\n" +
+                "out of reach)",
+        "Does your child point to share interest with you? (e.g. pointing at an\n" +
+                "interesting sight)",
+        "Does your child pretend? (e.g. care for dolls, talk on a toy phone)\n" +
+                "Does your child follow where you’re looking?",
+        "If you or someone else in the family is visibly upset, does your child show signs\n" +
+                "of wan9ng to comfort them? (e.g. stroking hair, hugging them)",
+        "Would you describe your child’s first words as:",
+        "Does your child use simple gestures? (e.g. wave goodbye)",
+        "Does your child stare at nothing with no apparent purpose?",
     )
 
     Column(
