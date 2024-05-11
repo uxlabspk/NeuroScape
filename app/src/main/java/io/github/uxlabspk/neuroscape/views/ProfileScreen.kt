@@ -77,9 +77,11 @@ fun ProfileScreen(
                 contentDescription = "Profile Icon")
             Text(text = user?.userName.toString(), fontSize = 26.sp)
             Text(text = user?.userEmail.toString(), fontSize = 16.sp)
-            SecondaryButton("View Reports", modifier = Modifier
+            SecondaryButton("Edit Profile", modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 50.dp), ) { navController.navigate("home")}
+                .padding(top = 50.dp), ) { navController.navigate("editprofile")}
+            SecondaryButton("View Reports", modifier = Modifier
+                .fillMaxWidth()) { navController.navigate("allscans")}
             SecondaryButton("Logout", modifier = Modifier.fillMaxWidth(), ){
                 FirebaseAuth.getInstance().signOut()
                 navController.addOnDestinationChangedListener { controller, destination, _ ->
