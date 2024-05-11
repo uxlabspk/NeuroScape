@@ -65,6 +65,18 @@ fun HomeScreen(
 
     })
 
+    ref.child(uuid.toString()).child("Reports").addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            for(dataSnapshot in snapshot.children) {
+                reports = dataSnapshot.getValue(ScanReports::class.java)
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+
 
     Column(
         Modifier.background(Color.White).fillMaxSize()
@@ -77,7 +89,7 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            UserInfo(Modifier.background(OffWhiteColor), user?.userName.toString(), user?.lastScan.toString()) {
+            UserInfo(Modifier.background(OffWhiteColor), user?.userName.toString(), reports?.reportTime.toString()) {
                 navController.navigate("profile")
             }
             Row(
@@ -93,20 +105,7 @@ fun HomeScreen(
             }
             Text("Recents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
 
-            ref.child(uuid.toString()).child("Reports").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for(dataSnapshot in snapshot.children) {
-                        reports = dataSnapshot.getValue(ScanReports::class.java)
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-
-
-                RecentScans("${reports?.reportName}", "${reports?.reportResult}", Modifier.background(OffWhiteColor))
+            RecentScans("${reports?.reportName}", "${reports?.reportResult}", Modifier.background(OffWhiteColor))
             }
         }
     }
