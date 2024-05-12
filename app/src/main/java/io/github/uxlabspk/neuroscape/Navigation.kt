@@ -66,7 +66,7 @@ fun NeuroScapeNavHost(
             ProfileScreen(navController = navController)
         }
         composable("editprofile") {
-            EditProfile() //(navController = navController)
+            EditProfile(navController = navController) //(navController = navController)
         }
     }
 }

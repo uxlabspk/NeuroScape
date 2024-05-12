@@ -76,7 +76,7 @@ import java.util.jar.Manifest
 
 @Composable
 fun EditProfile(
-
+    navController: NavController
 ) {
     var username by remember { mutableStateOf("") }
 
@@ -101,7 +101,7 @@ fun EditProfile(
                 Log.d("Error", "Invalid snapshot")
             }
         }
-        override fun onCancelled(error: DatabaseError) {}
+        override fun onCancelled(error: DatabaseError) { }
     })
 
     val profileUpdates = userProfileChangeRequest {
@@ -128,7 +128,7 @@ fun EditProfile(
             .background(Color.White)
             .fillMaxSize()
     ) {
-        TopBar(text = "Edit Profile", modifier = Modifier.height(56.dp)) {}
+        TopBar(text = "Edit Profile", modifier = Modifier.height(56.dp)) { navController.navigateUp()}
         Column(
             Modifier
                 .fillMaxSize()
@@ -244,10 +244,4 @@ fun Uri.asImageBitmap(contentResolver: ContentResolver): ImageBitmap? {
     } catch (e: Exception) {
         null
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun EditProfilePreview() {
-    EditProfile()
 }
