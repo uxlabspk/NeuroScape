@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toPixelMap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.imageResource
@@ -60,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
@@ -67,6 +69,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
@@ -79,9 +83,7 @@ fun EditProfile(
     navController: NavController
 ) {
     var username by remember { mutableStateOf("") }
-
-    var email by rememberSaveable { mutableStateOf("") }
-
+    var email by remember { mutableStateOf("") }
     var lastScan by remember { mutableStateOf("") }
 
     val context = LocalContext.current
@@ -104,11 +106,6 @@ fun EditProfile(
         override fun onCancelled(error: DatabaseError) { }
     })
 
-    val profileUpdates = userProfileChangeRequest {
-        displayName = username
-    }
-
-
     // Image Picker for profile/
     val lifecycleOwner = LocalLifecycleOwner.current
     val contentResolver: ContentResolver = context.contentResolver
@@ -122,6 +119,11 @@ fun EditProfile(
             bitmap.value = uri.asImageBitmap(contentResolver)
         }
     }
+
+    var storageRef = FirebaseStorage.getInstance().getReference("images/")
+    val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+
+
 
     Column(
         modifier = Modifier
@@ -147,9 +149,6 @@ fun EditProfile(
                 )
             }
 
-//            PrimaryButton(text = "", modifier = Modifier.clip(RoundedCornerShape(100))) {
-//                pickImageLauncher.launch("image/*")
-//            }
             Button(onClick = {pickImageLauncher.launch("image/*")}) {
                 Icon(Icons.Default.Face, contentDescription = null)
             }
@@ -157,6 +156,7 @@ fun EditProfile(
             TextField(
                 value = username,
                 onValueChange = { username = it },
+
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
@@ -191,21 +191,10 @@ fun EditProfile(
                 label = { Text(text = "Enter your email...") },
                 leadingIcon = {
                     Icon(
-//                        painter = painterResource(id = R.drawable.ic_password),
                         Icons.Default.Email,
                         contentDescription = "Email Icon"
                     )
                 },
-//                trailingIcon = {
-//                    IconButton(onClick = {
-//                        passwordVisibility = !passwordVisibility
-//                    }) {
-//                        Icon(
-//                            painter = icon,
-//                            contentDescription = "visibility icon"
-//                        )
-//                    }
-//                },
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
@@ -218,16 +207,19 @@ fun EditProfile(
                     cursorColor = Color.Black
                 ),
                 shape = RoundedCornerShape(5.dp),
-//                singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email
                 ),
-//                visualTransformation = if (passwordVisibility) VisualTransformation.None
-//                else PasswordVisualTransformation()
             )
 
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
-
+                selectedImageUri.value?.let {
+                    userProfileImg.putFile(it).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(context, "sdf ", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
         }
 

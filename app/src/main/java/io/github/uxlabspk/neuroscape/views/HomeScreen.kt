@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import io.github.uxlabspk.neuroscape.data.ScanReports
 import io.github.uxlabspk.neuroscape.data.User
+import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
@@ -77,9 +79,12 @@ fun HomeScreen(
         }
     })
 
+    var time = if (reports != null) reports?.reportTime else user?.lastScan
 
     Column(
-        Modifier.background(Color.White).fillMaxSize()
+        Modifier
+            .background(Color.White)
+            .fillMaxSize()
     ) {
         TopBar(text = "Home", modifier = Modifier.height(54.dp)) {
             navController.navigateUp()
@@ -89,7 +94,7 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            UserInfo(Modifier.background(OffWhiteColor), user?.userName.toString(), reports?.reportTime.toString()) {
+            UserInfo(Modifier.background(OffWhiteColor), user?.userName.toString(), time.toString()) {
                 navController.navigate("profile")
             }
             Row(
@@ -105,7 +110,17 @@ fun HomeScreen(
             }
             Text("Recents", Modifier.padding(vertical = 15.dp), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
 
-            RecentScans("${reports?.reportName}", "${reports?.reportResult}", Modifier.background(OffWhiteColor))
+                if (reports != null) {
+                    RecentScans("${reports?.reportName}", "${reports?.reportResult}", Modifier.background(OffWhiteColor))
+                } else {
+                    Column(
+                        Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text("No Reports Found", color = GrayColor)
+                    }
+                }
             }
         }
     }
