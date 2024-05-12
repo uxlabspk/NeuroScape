@@ -2,6 +2,7 @@ package io.github.uxlabspk.neuroscape.views.components
 
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.uxlabspk.neuroscape.R
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 
 @Composable
@@ -30,7 +33,7 @@ fun TopBar(text: String, modifier: Modifier, onClick: () -> Unit) {
         shadowElevation = 3.dp
     ) {
         Row(
-            modifier.padding(horizontal = 5.dp),
+            modifier.padding(horizontal = 0.dp).background(Color.White),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
@@ -38,25 +41,16 @@ fun TopBar(text: String, modifier: Modifier, onClick: () -> Unit) {
             ) {
                 Icon(Icons.Default.KeyboardArrowLeft, contentDescription = null)
             }
-//            Image(Icons.Default.KeyboardArrowLeft, contentDescription = null)
             Text(
                 text,
+                fontFamily = SF_Font_Family,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end = 30.dp)
+                    .padding(end = 40.dp)
             )
         }
     }
-}
-
-
-
-
-@Preview (widthDp = 300, heightDp = 42)
-@Composable
-fun PreviewTopBar() {
-    TopBar(text = "sdf", Modifier.fillMaxWidth(), {})
 }

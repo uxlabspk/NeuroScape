@@ -53,6 +53,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -74,6 +76,7 @@ import com.google.firebase.storage.storage
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import java.util.jar.Manifest
@@ -123,8 +126,6 @@ fun EditProfile(
     var storageRef = FirebaseStorage.getInstance().getReference("images/")
     val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
-
-
     Column(
         modifier = Modifier
             .background(Color.White)
@@ -138,7 +139,6 @@ fun EditProfile(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
             bitmap.value?.let {
                 Image(
                     bitmap = it,
@@ -156,7 +156,6 @@ fun EditProfile(
             TextField(
                 value = username,
                 onValueChange = { username = it },
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
@@ -178,6 +177,10 @@ fun EditProfile(
                     cursorColor = Color.Black
                 ),
                 shape = RoundedCornerShape(5.dp),
+                textStyle = TextStyle(
+                    fontFamily = SF_Font_Family,
+                    fontWeight = FontWeight.Normal
+                )
                 )
 
             TextField(
@@ -209,14 +212,14 @@ fun EditProfile(
                 shape = RoundedCornerShape(5.dp),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email
-                ),
+                )
             )
 
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
                 selectedImageUri.value?.let {
                     userProfileImg.putFile(it).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(context, "sdf ", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Profile Successfully Updated. ", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

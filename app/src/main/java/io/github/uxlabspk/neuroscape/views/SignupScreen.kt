@@ -36,16 +36,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
@@ -94,7 +97,7 @@ fun SignupScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                modifier = Modifier.width(200.dp),
+                modifier = Modifier.width(180.dp),
                 painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = null
             )
@@ -233,15 +236,15 @@ fun SignupScreen(
             }
 
             Row(
-                modifier = Modifier.height(34.dp).fillMaxWidth(),
+                modifier = Modifier.height(36.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Already have an account? ")
+                Text("Already have an account? ", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
                 TextButton(
                     onClick = { navController.navigate("signin") }
                 ) {
-                    Text("Sign In")
+                    Text("Sign In", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
                 }
             }
 

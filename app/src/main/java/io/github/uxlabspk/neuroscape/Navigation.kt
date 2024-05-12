@@ -60,7 +60,7 @@ fun NeuroScapeNavHost(
             QuestionsScreen(navController = navController)
         }
         composable("result") {
-            ScanResults(navController = navController, isAutismTraits = false)
+            ScanResults(navController = navController, isAutismTraits = true)
         }
         composable("profile") {
             ProfileScreen(navController = navController)

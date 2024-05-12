@@ -33,18 +33,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import io.github.uxlabspk.neuroscape.R
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import kotlinx.coroutines.launch
+import java.time.format.TextStyle
 
 
 @Composable
@@ -84,7 +88,7 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                modifier = Modifier.width(200.dp),
+                modifier = Modifier.width(180.dp),
                 painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = null
             )
@@ -115,8 +119,7 @@ fun LoginScreen(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
-
-                )
+            )
 
             TextField(
                 modifier = Modifier
@@ -180,16 +183,16 @@ fun LoginScreen(
             }
             Row(
                 modifier = Modifier
-                    .height(34.dp)
+                    .height(36.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Don't have an account? ")
+                Text("Don't have an account? ", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
                 TextButton(
                     onClick = { navController.navigate("signup") }
                 ) {
-                    Text("Create Account")
+                    Text("Create Account", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
                 }
             }
 

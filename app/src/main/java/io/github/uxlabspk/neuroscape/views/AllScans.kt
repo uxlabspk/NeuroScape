@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +35,7 @@ import com.google.firebase.database.ValueEventListener
 import io.github.uxlabspk.neuroscape.data.ScanReports
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.RecentScans
@@ -84,7 +86,7 @@ fun AllScans(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Total Reports : ${reports.size}")
+                Text("Total Reports : ${reports.size}", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal)
                 AltButton(text = "Delete All", modifier = Modifier) {
                     FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports").removeValue().addOnSuccessListener{
                         Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
@@ -106,7 +108,7 @@ fun AllScans(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("No Reports Found", color = GrayColor)
+                    Text("No Reports Found", color = GrayColor, fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal)
                 }
             }
 
