@@ -79,6 +79,7 @@ import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
+import java.io.File
 import java.util.jar.Manifest
 
 @Composable
@@ -219,6 +220,8 @@ fun EditProfile(
                 selectedImageUri.value?.let {
                     userProfileImg.putFile(it).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            val localFile = File(context.filesDir, "image.jpg")
+                            localFile.delete()
                             Toast.makeText(context, "Profile Successfully Updated. ", Toast.LENGTH_SHORT).show()
                         }
                     }

@@ -2,6 +2,7 @@ package io.github.uxlabspk.neuroscape.views
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,14 +80,24 @@ fun ProfileScreen(
 
     var bitmapImg by remember { mutableStateOf<ImageBitmap?>(null) }
 
-    val localFile = File.createTempFile("images", "jpg")
+    val context = LocalContext.current
 
-    userProfileImg.getFile(localFile).addOnSuccessListener {
+    val localFile = File(context.filesDir, "image.jpg") // File.createTempFile("images", "jpg")
+
+    if (!localFile.exists()) {
+        userProfileImg.getFile(localFile).addOnSuccessListener {
+            var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+            val imageBitmap = bitmap.asImageBitmap()
+
+            bitmapImg = imageBitmap
+        }
+    } else {
         var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
         val imageBitmap = bitmap.asImageBitmap()
 
         bitmapImg = imageBitmap
     }
+
 
     Column(
         modifier = Modifier

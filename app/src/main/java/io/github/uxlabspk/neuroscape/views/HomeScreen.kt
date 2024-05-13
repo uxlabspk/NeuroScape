@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,8 @@ fun HomeScreen(
     var user by remember { mutableStateOf<User?>(null) }
     var reports by remember { mutableStateOf<ScanReports?>(null) }
 
+    val context = LocalContext.current
+
     val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
     val uuid = FirebaseAuth.getInstance().currentUser?.uid
 
@@ -93,11 +96,35 @@ fun HomeScreen(
     var storageRef = FirebaseStorage.getInstance().getReference("images/")
     val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
+//    val localFile = File(context.filesDir, "image.jpg") // File.createTempFile("images", "jpg")
+//
+//    if (!localFile.exists()) {
+//        userProfileImg.getFile(localFile).addOnSuccessListener {
+//            var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+//            val imageBitmap = bitmap.asImageBitmap()
+//
+//            bitmapImg = imageBitmap
+//        }
+//    } else {
+//        var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+//        val imageBitmap = bitmap.asImageBitmap()
+//
+//        bitmapImg = imageBitmap
+//    }
+
+
     var bitmapImg by remember { mutableStateOf<ImageBitmap?>(null) }
 
-    val localFile = File.createTempFile("images", "jpg")
+    val localFile = File(context.filesDir, "image.jpg") //File.createTempFile("images", "jpg")
 
-    userProfileImg.getFile(localFile).addOnSuccessListener {
+    if (!localFile.exists()) {
+        userProfileImg.getFile(localFile).addOnSuccessListener {
+            var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+            val imageBitmap = bitmap.asImageBitmap()
+
+            bitmapImg = imageBitmap
+        }
+    } else {
         var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
         val imageBitmap = bitmap.asImageBitmap()
 
