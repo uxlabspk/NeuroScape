@@ -68,6 +68,9 @@ fun QuestionsScreen(
 
     //if (index < 9) reset = true
 
+
+
+
     MainScreen(navController, questionsList[index], index, next, back)
 }
 

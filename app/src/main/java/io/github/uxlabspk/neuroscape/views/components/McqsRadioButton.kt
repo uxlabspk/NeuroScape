@@ -21,10 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 @Composable
 fun McqsRadioButton(
@@ -83,7 +85,7 @@ fun CustomRadioGroup(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = title ,
-                    modifier = Modifier.padding(horizontal = 12.dp))
+                    modifier = Modifier.padding(horizontal = 12.dp), fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal)
                 RadioButton(
                     selected = selected,
                     colors =  RadioButtonDefaults.colors(BlueColor),

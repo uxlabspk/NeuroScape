@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import com.google.firebase.auth.FirebaseAuth
 import io.github.uxlabspk.neuroscape.views.AllScans
+import io.github.uxlabspk.neuroscape.views.EditProfile
 import io.github.uxlabspk.neuroscape.views.HomeScreen
 import io.github.uxlabspk.neuroscape.views.IntroScreen
 import io.github.uxlabspk.neuroscape.views.LoginScreen
@@ -59,10 +60,13 @@ fun NeuroScapeNavHost(
             QuestionsScreen(navController = navController)
         }
         composable("result") {
-            ScanResults(navController = navController, isAutismTraits = false)
+            ScanResults(navController = navController, isAutismTraits = true)
         }
         composable("profile") {
             ProfileScreen(navController = navController)
+        }
+        composable("editprofile") {
+            EditProfile(navController = navController) //(navController = navController)
         }
     }
 }

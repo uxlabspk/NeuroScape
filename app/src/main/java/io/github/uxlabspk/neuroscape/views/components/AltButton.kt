@@ -6,10 +6,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.LightTextColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 @Composable
 fun AltButton(text: String, modifier: Modifier, onClick: () -> Unit) {
@@ -25,14 +27,6 @@ fun AltButton(text: String, modifier: Modifier, onClick: () -> Unit) {
             defaultElevation = 2.dp
         )
     ) {
-        Text(text)
+        Text(text, fontFamily = SF_Font_Family, fontWeight = FontWeight.Medium)
     }
-}
-
-
-
-@Preview
-@Composable
-fun AltButtonPreview() {
-    AltButton("View All Scans", Modifier, {})
 }

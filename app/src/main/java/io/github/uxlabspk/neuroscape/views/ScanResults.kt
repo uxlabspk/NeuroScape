@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
@@ -41,9 +42,9 @@ fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
     Column(
         modifier = Modifier.background(Color.White)
     ) {
-        TopBar(text = "Sign in", modifier = Modifier
+        TopBar(text = "Scan Results", modifier = Modifier
             .fillMaxWidth()
-            .height(44.dp),
+            .height(54.dp),
             { navController.navigateUp() }
         )
 
@@ -55,11 +56,12 @@ fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
         ) {
             Text(
                 icon,
-                fontSize = 96.sp
+                fontSize = 96.sp,
             )
             Text(
                 heading,
-                fontSize = 40.sp,
+                fontSize = 38.sp,
+                fontFamily = SF_Font_Family,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center
             )
@@ -67,11 +69,12 @@ fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
                 modifier = Modifier.padding(vertical = 8.dp),
                 text = subheading,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
+                fontFamily = SF_Font_Family,
+                fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center
             )
 
-            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 120.dp), { navController.navigate("home") })
+            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 50.dp), { navController.navigate("home") })
         }
     }
 

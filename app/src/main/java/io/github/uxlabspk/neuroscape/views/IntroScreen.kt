@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.SecondaryButton
 
@@ -34,14 +35,16 @@ fun IntroScreen(navController: NavController, heading: String, subheading: Strin
             Text(
                 heading,
                 fontSize = 33.sp,
+                fontFamily = SF_Font_Family,
                 fontWeight = FontWeight.Medium
             )
             Text(
                 subheading,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(12.dp),
+                fontFamily = SF_Font_Family,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Normal
             )
             PrimaryButton("Login", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), { navController.navigate("signin") })
             SecondaryButton("Signup", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), { navController.navigate("signup") })

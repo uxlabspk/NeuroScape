@@ -22,10 +22,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import io.github.uxlabspk.neuroscape.R
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 @Composable
 fun UserInput(
@@ -62,6 +65,9 @@ fun UserInput(
         ),
         shape = RoundedCornerShape(5.dp),
         singleLine = true,
-
+        textStyle = TextStyle(
+            fontFamily = SF_Font_Family,
+            fontWeight = FontWeight.Normal
+        )
     )
 }

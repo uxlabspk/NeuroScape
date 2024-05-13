@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 @Composable
 fun SecondaryButton(text: String, modifier: Modifier, onClick: () -> Unit) {
@@ -33,14 +34,7 @@ fun SecondaryButton(text: String, modifier: Modifier, onClick: () -> Unit) {
             defaultElevation = 2.dp
         )
     ) {
-        Text(text)
+        Text(text, fontFamily = SF_Font_Family, fontWeight = FontWeight.Medium)
     }
 
-}
-
-
-@Preview(widthDp = 300, heightDp = 42)
-@Composable
-fun PreviewSeButton() {
-    SecondaryButton(text = "sdf", Modifier, {})
 }

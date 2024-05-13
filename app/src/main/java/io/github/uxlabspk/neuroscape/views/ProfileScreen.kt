@@ -1,13 +1,19 @@
 package io.github.uxlabspk.neuroscape.views
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Icon
@@ -19,7 +25,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,9 +44,14 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.google.firebase.storage.FirebaseStorage
+import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
+import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.SecondaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
+import java.io.File
 
 
 @Composable
@@ -55,6 +73,19 @@ fun ProfileScreen(
         override fun onCancelled(error: DatabaseError) {}
     })
 
+    var storageRef = FirebaseStorage.getInstance().getReference("images/")
+    val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+
+    var bitmapImg by remember { mutableStateOf<ImageBitmap?>(null) }
+
+    val localFile = File.createTempFile("images", "jpg")
+
+    userProfileImg.getFile(localFile).addOnSuccessListener {
+        var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+        val imageBitmap = bitmap.asImageBitmap()
+
+        bitmapImg = imageBitmap
+    }
 
     Column(
         modifier = Modifier
@@ -68,19 +99,22 @@ fun ProfileScreen(
                 .padding(horizontal = 20.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Default.AccountCircle,
+            Image(
+                painter =  bitmapImg?.let { BitmapPainter(it) } ?: painterResource(id = R.drawable.ic_account),
                 modifier = Modifier
-                    .height(120.dp)
-                    .width(120.dp)
-                    .padding(top = 20.dp),
-                contentDescription = "Profile Icon")
-            Text(text = user?.userName.toString(), fontSize = 26.sp)
-            Text(text = user?.userEmail.toString(), fontSize = 16.sp)
-            SecondaryButton("View Reports", modifier = Modifier
+                    .clip(RoundedCornerShape(100.dp))
+                    .size(120.dp),
+                contentDescription = null
+            )
+            Text(text = user?.userName.toString(), fontSize = 26.sp, fontFamily = SF_Font_Family, fontWeight = FontWeight.Medium)
+            Text(text = user?.userEmail.toString(), fontSize = 16.sp, fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal)
+
+            AltButton("Edit Profile", modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 50.dp), ) { navController.navigate("home")}
-            SecondaryButton("Logout", modifier = Modifier.fillMaxWidth(), ){
+                .padding(top = 30.dp), ) { navController.navigate("editprofile")}
+            AltButton("View Reports", modifier = Modifier
+                .fillMaxWidth()) { navController.navigate("allscans")}
+            AltButton("Logout", modifier = Modifier.fillMaxWidth(), ){
                 FirebaseAuth.getInstance().signOut()
                 navController.addOnDestinationChangedListener { controller, destination, _ ->
                     if(destination.route == "profile") {
