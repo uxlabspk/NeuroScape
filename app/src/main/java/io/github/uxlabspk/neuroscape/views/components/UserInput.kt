@@ -1,33 +1,21 @@
 package io.github.uxlabspk.neuroscape.views.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 @Composable
@@ -37,13 +25,11 @@ fun UserInput(
     modifier: Modifier,
     isError: Boolean
 ) {
-    var textState by remember {
-        mutableStateOf("")
-    }
+    var textState by remember { mutableStateOf("") }
 
     TextField(
         value = textState,
-        onValueChange = { textState = it},
+        onValueChange = { textState = it },
         modifier = modifier,
         label = { Text(text) },
         isError = isError,

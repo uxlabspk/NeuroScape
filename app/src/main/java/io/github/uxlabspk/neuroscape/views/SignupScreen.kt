@@ -49,7 +49,6 @@ import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
-
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import java.time.LocalDateTime
@@ -60,29 +59,20 @@ import java.time.format.DateTimeFormatter
 fun SignupScreen(
     navController: NavController,
 ) {
-    var username by remember {
-        mutableStateOf("")
-    }
+    // states
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
-    var email by remember {
-        mutableStateOf("")
-    }
-
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var passwordVisibility by remember {
-        mutableStateOf(false)
-    }
-
+    // variables
     val icon =
         if (passwordVisibility) painterResource(id = R.drawable.ic_visible)
         else painterResource(id = R.drawable.ic_invisible)
 
-    var isUserError: Boolean = false
-    var isEmailError: Boolean = false
-    var isPasswordError: Boolean = false
+    val isUserError = false
+    val isEmailError = false
+    val isPasswordError = false
 
     val context = LocalContext.current
 
@@ -210,41 +200,68 @@ fun SignupScreen(
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
-                            val date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                            var user = User(username , email, date)
+                            val date = LocalDateTime.now()
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                            val user = User(username, email, date)
                             FirebaseDatabase.getInstance().getReference()
                                 .child("Users")
-                                .child(FirebaseAuth
-                                    .getInstance()
-                                    .uid.toString())
+                                .child(
+                                    FirebaseAuth
+                                        .getInstance()
+                                        .uid.toString()
+                                )
                                 .child("Profile")
                                 .setValue(user)
                                 .addOnSuccessListener {
-                                navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
-                                    if (navDestination.route == "signup") {
-                                        Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
-                                        navController.navigate("home")
+                                    navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+                                        if (navDestination.route == "signup") {
+                                            Toast.makeText(
+                                                context,
+                                                "Authentication successful",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            navController.navigate("home")
+                                        }
                                     }
+                                }.addOnFailureListener {
+                                    Toast.makeText(
+                                        context,
+                                        "Something abc went wrong : ${task.exception?.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
-                            }.addOnFailureListener {
-                                Toast.makeText(context, "Something abc went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                            }
                         } else {
-                            Toast.makeText(context, "Something ghv went wrong : ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Something ghv went wrong : ${task.exception?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
             }
 
             Row(
-                modifier = Modifier.height(36.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .height(36.dp)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Already have an account? ", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                Text(
+                    "Already have an account? ",
+                    fontFamily = SF_Font_Family,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+                )
                 TextButton(
                     onClick = { navController.navigate("signin") }
                 ) {
-                    Text("Sign In", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                    Text(
+                        "Sign In",
+                        fontFamily = SF_Font_Family,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp
+                    )
                 }
             }
 

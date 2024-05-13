@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,8 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -57,15 +53,23 @@ import java.io.File
 fun HomeScreen(
     navController: NavController,
 ) {
+    // states
     var user by remember { mutableStateOf<User?>(null) }
     var reports by remember { mutableStateOf<ScanReports?>(null) }
+    var bitmapImg by remember { mutableStateOf<ImageBitmap?>(null) }
 
+    // variables
     val context = LocalContext.current
+    val time = if (reports != null) reports?.reportTime else user?.lastScan
+    val localFile = File(context.filesDir, "image.jpg")
 
+    // Firebase References
     val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
     val uuid = FirebaseAuth.getInstance().currentUser?.uid
+    val storageRef = FirebaseStorage.getInstance().getReference("images/")
+    val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
-    ref.child(uuid.toString()).child("Profile").addValueEventListener(object: ValueEventListener {
+    ref.child(uuid.toString()).child("Profile").addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             if (snapshot.exists()) {
                 user = snapshot.getValue(User::class.java)
@@ -80,7 +84,7 @@ fun HomeScreen(
 
     ref.child(uuid.toString()).child("Reports").addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            for(dataSnapshot in snapshot.children) {
+            for (dataSnapshot in snapshot.children) {
                 reports = dataSnapshot.getValue(ScanReports::class.java)
             }
         }
@@ -90,42 +94,15 @@ fun HomeScreen(
         }
     })
 
-    var time = if (reports != null) reports?.reportTime else user?.lastScan
-
-
-    var storageRef = FirebaseStorage.getInstance().getReference("images/")
-    val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
-
-//    val localFile = File(context.filesDir, "image.jpg") // File.createTempFile("images", "jpg")
-//
-//    if (!localFile.exists()) {
-//        userProfileImg.getFile(localFile).addOnSuccessListener {
-//            var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-//            val imageBitmap = bitmap.asImageBitmap()
-//
-//            bitmapImg = imageBitmap
-//        }
-//    } else {
-//        var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-//        val imageBitmap = bitmap.asImageBitmap()
-//
-//        bitmapImg = imageBitmap
-//    }
-
-
-    var bitmapImg by remember { mutableStateOf<ImageBitmap?>(null) }
-
-    val localFile = File(context.filesDir, "image.jpg") //File.createTempFile("images", "jpg")
-
     if (!localFile.exists()) {
         userProfileImg.getFile(localFile).addOnSuccessListener {
-            var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
             val imageBitmap = bitmap.asImageBitmap()
 
             bitmapImg = imageBitmap
         }
     } else {
-        var bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
         val imageBitmap = bitmap.asImageBitmap()
 
         bitmapImg = imageBitmap
@@ -145,7 +122,12 @@ fun HomeScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            UserInfo(Modifier.background(OffWhiteColor), bitmapImg, user?.userName.toString(), time.toString()) {
+            UserInfo(
+                Modifier.background(OffWhiteColor),
+                bitmapImg,
+                user?.userName.toString(),
+                time.toString()
+            ) {
                 navController.navigate("profile")
             }
             Row(
@@ -157,24 +139,43 @@ fun HomeScreen(
                 AltButton("All Scans", Modifier) {
                     navController.navigate("allscans")
                 }
-                PrimaryButton("New Scans", Modifier, { navController.navigate("newscan")})
+                PrimaryButton("New Scans", Modifier, { navController.navigate("newscan") })
             }
-            Text("Recents", Modifier.padding(vertical = 15.dp), fontFamily = SF_Font_Family, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+            Text(
+                "Recents",
+                Modifier.padding(vertical = 15.dp),
+                fontFamily = SF_Font_Family,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
 
-                if (reports != null) {
-                    RecentScans("${reports?.reportName}", "${reports?.reportResult}", Modifier.background(OffWhiteColor))
-                } else {
-                    Column(
-                        Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(painterResource(id = R.drawable.not_found), contentDescription = "not found", Modifier.height(300.dp))
-                        Text("No Reports Found", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, color = GrayColor)
-                    }
+            if (reports != null) {
+                RecentScans(
+                    "${reports?.reportName}",
+                    "${reports?.reportResult}",
+                    Modifier.background(OffWhiteColor)
+                )
+            } else {
+                Column(
+                    Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painterResource(id = R.drawable.not_found),
+                        contentDescription = "not found",
+                        Modifier.height(300.dp)
+                    )
+                    Text(
+                        "No Reports Found",
+                        fontFamily = SF_Font_Family,
+                        fontWeight = FontWeight.Normal,
+                        color = GrayColor
+                    )
                 }
             }
         }
     }
+}
 
 

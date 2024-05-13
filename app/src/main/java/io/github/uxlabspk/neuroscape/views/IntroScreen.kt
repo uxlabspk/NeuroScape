@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,8 +45,28 @@ fun IntroScreen(navController: NavController, heading: String, subheading: Strin
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal
             )
-            PrimaryButton("Login", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), { navController.navigate("signin") })
-            SecondaryButton("Signup", Modifier.fillMaxWidth().padding(horizontal = 32.dp).padding(vertical = 2.dp), { navController.navigate("signup") })
+            PrimaryButton(
+                "Login",
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+                    .padding(vertical = 2.dp)
+            ) {
+                navController.navigate(
+                    "signin"
+                )
+            }
+            SecondaryButton(
+                "Signup",
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp)
+                    .padding(vertical = 2.dp)
+            ) {
+                navController.navigate(
+                    "signup"
+                )
+            }
         }
     }
 }
