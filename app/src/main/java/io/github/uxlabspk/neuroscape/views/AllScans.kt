@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +44,7 @@ import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.AltButton
+import io.github.uxlabspk.neuroscape.views.components.CustomDialog
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.RecentScans
 import io.github.uxlabspk.neuroscape.views.components.TopBar
@@ -74,6 +78,30 @@ fun AllScans(
 
     val context = LocalContext.current
 
+    var isConfirmed by remember {
+        mutableStateOf(false)
+    }
+
+    if (isConfirmed) {
+        CustomDialog(
+            onDismissRequest = {
+                isConfirmed = false
+            },
+            onConfirmation = {
+                isConfirmed = false
+                FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports").removeValue().addOnSuccessListener{
+                    Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
+                    reports = emptyList()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Unknown Error Occur!", Toast.LENGTH_SHORT).show()
+                }
+            },
+            dialogTitle = "Confirm",
+            dialogText = "Are you sure to delete?",
+            icon = Icons.Default.CheckCircle
+        )
+    }
+
     Column(
         Modifier
             .background(Color.White)
@@ -86,21 +114,24 @@ fun AllScans(
                 .padding(20.dp, 10.dp)
         ) {
             Row(
-                Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text("Total Reports : ${reports.size}", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal)
                 AltButton(text = "Delete All", modifier = Modifier) {
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports").removeValue().addOnSuccessListener{
-                        Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
-                        reports = emptyList()
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "Unknown Error Occur!", Toast.LENGTH_SHORT).show()
-                    }
+                    isConfirmed = true
+//                    FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports").removeValue().addOnSuccessListener{
+//                        Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
+//                        reports = emptyList()
+//                    }.addOnFailureListener {
+//                        Toast.makeText(context, "Unknown Error Occur!", Toast.LENGTH_SHORT).show()
+//                    }
                 }
             }
-            if (reports.size != 0) {
+            if (reports.isNotEmpty()) {
                 LazyColumn {
                     items(reports) {report ->
                         RecentScans("${report?.reportName}", "${report?.reportResult}", Modifier.background(OffWhiteColor))

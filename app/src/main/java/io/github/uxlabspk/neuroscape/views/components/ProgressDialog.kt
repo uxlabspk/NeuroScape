@@ -60,12 +60,13 @@ fun ProgressDialog(
             CircularProgressIndicator(
                 color = BlueColor,
                 modifier = Modifier.size(36.dp),
-                progress = 80f
+                progress = 80f,
             )
 
             Text(text = "Loading", Modifier.padding(horizontal = 10.dp), fontFamily = SF_Font_Family, fontWeight = FontWeight.Medium, fontSize = 18.sp)
         }
     }
+
 }
 
 
