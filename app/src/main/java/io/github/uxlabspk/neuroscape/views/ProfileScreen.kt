@@ -55,7 +55,7 @@ fun ProfileScreen(
 
     // variables
     val context = LocalContext.current
-    val localFile = File(context.filesDir, "image.jpg")
+    val localFile = File.createTempFile("image", "jpg") //File(context.filesDir, "image.jpg")
 
     // Firebase Reference
     val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
@@ -76,19 +76,19 @@ fun ProfileScreen(
             override fun onCancelled(error: DatabaseError) {}
         })
 
-    if (!localFile.exists()) {
+    // if (!localFile.exists()) {
         userProfileImg.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
             val imageBitmap = bitmap.asImageBitmap()
 
             bitmapImg = imageBitmap
         }
-    } else {
-        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-        val imageBitmap = bitmap.asImageBitmap()
-
-        bitmapImg = imageBitmap
-    }
+//    } else {
+//        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+//        val imageBitmap = bitmap.asImageBitmap()
+//
+//        bitmapImg = imageBitmap
+//    }
 
 
     Column(

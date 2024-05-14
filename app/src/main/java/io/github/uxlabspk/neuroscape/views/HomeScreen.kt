@@ -61,7 +61,7 @@ fun HomeScreen(
     // variables
     val context = LocalContext.current
     val time = if (reports != null) reports?.reportTime else user?.lastScan
-    val localFile = File(context.filesDir, "image.jpg")
+    val localFile = File.createTempFile("iamge", "jpg") //File(context.filesDir, "image.jpg")
 
     // Firebase References
     val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
@@ -94,19 +94,19 @@ fun HomeScreen(
         }
     })
 
-    if (!localFile.exists()) {
+    // if (!localFile.exists()) {
         userProfileImg.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
             val imageBitmap = bitmap.asImageBitmap()
 
             bitmapImg = imageBitmap
         }
-    } else {
-        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-        val imageBitmap = bitmap.asImageBitmap()
-
-        bitmapImg = imageBitmap
-    }
+//    } else {
+//        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+//        val imageBitmap = bitmap.asImageBitmap()
+//
+//        bitmapImg = imageBitmap
+//    }
 
 
     Column(

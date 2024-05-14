@@ -200,8 +200,8 @@ fun EditProfile(
                 selectedImageUri.value?.let {
                     userProfileImg.putFile(it).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            val localFile = File(context.filesDir, "image.jpg")
-                            localFile.delete()
+//                            val localFile = File(context.filesDir, "image.jpg")
+//                            localFile.delete()
                             Toast.makeText(
                                 context,
                                 "Profile Successfully Updated. ",
