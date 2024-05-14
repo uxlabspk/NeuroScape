@@ -1,5 +1,7 @@
 package io.github.uxlabspk.neuroscape.views
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -29,22 +31,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import io.github.uxlabspk.neuroscape.ml.Model
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.McqsRadioButton
 import io.github.uxlabspk.neuroscape.views.components.NavigationButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-
-// FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.nio.ByteBuffer
+import java.util.Arrays
 
 @Composable
 fun QuestionsScreen(
     navController: NavController,
 ) {
     var index by remember { mutableStateOf(0) }
+    val context = LocalContext.current
 
     var questionsList = listOf(
         "Does your child look at you when you call his/her name?",
@@ -61,14 +69,15 @@ fun QuestionsScreen(
 
     val back = { index = (index - 1 + questionsList.size) % questionsList.size }
     var next = if (index == 9) {
-        { navController.navigate("result") }
+        {
+            navController.navigate("result")
+            modelRead(context)
+        }
     } else {
         { index = (index + 1) % questionsList.size }
     }
 
     //if (index < 9) reset = true
-
-
 
 
     MainScreen(navController, questionsList[index], index, next, back)
@@ -102,7 +111,7 @@ fun MainScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         ) {
-            Box (
+            Box(
                 Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
@@ -111,12 +120,18 @@ fun MainScreen(
                 Text(text = questions, Modifier.padding(10.dp))
             }
 
-            Column (
+            Column(
                 Modifier
                     .fillMaxHeight(8 / 9f)
                     .padding(top = 10.dp)
             ) {
-                McqsRadioButton(option1 = "Always", option2 = "Usually", option3 = "Sometimes", option4 = "Rarly", option5 = "Never")
+                McqsRadioButton(
+                    option1 = "Always",
+                    option2 = "Usually",
+                    option3 = "Sometimes",
+                    option4 = "Rarly",
+                    option5 = "Never"
+                )
             }
 
             Row(
@@ -144,5 +159,25 @@ fun MainScreen(
     }
 }
 
+fun modelRead(context: Context) {
+    val model = Model.newInstance(context)
 
+    // Creates inputs for reference.
+    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 10), DataType.FLOAT32)
+
+    inputFeature0.loadArray(floatArrayOf(0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F))
+
+    // Runs model inference and gets result.
+    val outputs = model.process(inputFeature0)
+    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+    val floatArray: FloatArray = outputFeature0.floatArray
+    val intArray: IntArray = floatArray.map { it.toInt() }.toIntArray()
+
+
+    // Showing the output to logcat
+    Log.d("Output", intArray[0].toString())
+
+    model.close()
+}
 
