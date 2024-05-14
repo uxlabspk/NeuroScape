@@ -139,7 +139,7 @@ fun HomeScreen(
                 AltButton("All Scans", Modifier) {
                     navController.navigate("allscans")
                 }
-                PrimaryButton("New Scans", Modifier, { navController.navigate("newscan") })
+                PrimaryButton("New Scans", Modifier) { navController.navigate("newscan") }
             }
             Text(
                 "Recents",
