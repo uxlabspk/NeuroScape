@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -25,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,44 +41,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import kotlinx.coroutines.launch
-import java.time.format.TextStyle
 
 
 @Composable
 fun LoginScreen(
     navController: NavController,
 ) {
-    var textState by remember {
-        mutableStateOf("")
-    }
-
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var passwordVisibility by remember {
-        mutableStateOf(false)
-    }
+    // states
+    var textState by remember { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val icon =
         if (passwordVisibility) painterResource(id = R.drawable.ic_visible)
         else painterResource(id = R.drawable.ic_invisible)
 
-
-    var isEmailError: Boolean = false
-    var isPasswordError: Boolean = false
-
+    // variables
+    val isEmailError = false
+    val isPasswordError = false
     val context = LocalContext.current
 
-
-    Column(Modifier.background(Color.White)) {
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Login", modifier = Modifier.height(54.dp)) { navController.navigateUp() }
         Column(
             modifier = Modifier
@@ -168,18 +155,24 @@ fun LoginScreen(
             )
 
             PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth()) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password).addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT).show()
-                        navController.addOnDestinationChangedListener { controller, destination, _ ->
-                            if(destination.route == "signin") {
-                                controller.navigate("home")
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
+                    .addOnCompleteListener() { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.addOnDestinationChangedListener { controller, destination, _ ->
+                                if (destination.route == "signin") {
+                                    controller.navigate("home")
+                                }
                             }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Authentication failed: ${task.exception?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    } else {
-                        Toast.makeText(context, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                     }
-                }
             }
             Row(
                 modifier = Modifier
@@ -188,11 +181,23 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Don't have an account? ", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                Text(
+                    "Don't have an account? ",
+                    fontFamily = SF_Font_Family,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
                 TextButton(
-                    onClick = { navController.navigate("signup") }
+                    onClick = { navController.navigate("signup") },
                 ) {
-                    Text("Create Account", fontFamily = SF_Font_Family, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+                    Text(
+                        "Create Account",
+                        fontFamily = SF_Font_Family,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
 

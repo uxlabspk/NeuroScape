@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -23,24 +23,24 @@ import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 @Composable
-fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
-    var icon:String
-    var heading: String
-    var subheading:String
+fun ScanResults(isAutismTraits: Boolean, navController: NavController) {
+    val icon: String
+    val heading: String
+    val subheading: String
 
     if (isAutismTraits) {
         icon = "\uD83D\uDE22"
         heading = "Alas"
-        subheading =  "Autism traits are found in this scan."
+        subheading = "Autism traits are found in this scan."
     } else {
         icon = "\uD83D\uDE0D\uFE0F"
         heading = "Hurrah"
-        subheading =  "No Autism traits are found in this scan."
+        subheading = "No Autism traits are found in this scan."
     }
 
 
     Column(
-        modifier = Modifier.background(Color.White)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     ) {
         TopBar(text = "Scan Results", modifier = Modifier
             .fillMaxWidth()
@@ -74,7 +74,11 @@ fun ScanResults(isAutismTraits: Boolean, navController: NavController,) {
                 textAlign = TextAlign.Center
             )
 
-            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 50.dp), { navController.navigate("home") })
+            PrimaryButton(text = "Go Home", modifier = Modifier.padding(top = 50.dp)) {
+                navController.navigate(
+                    "home"
+                )
+            }
         }
     }
 
