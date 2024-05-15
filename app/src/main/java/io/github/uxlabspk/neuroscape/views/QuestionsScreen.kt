@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -101,7 +102,7 @@ fun MainScreen(
 //        answerList.put("key2", "value2")
 
     Column(
-        Modifier.background(Color.White)
+        Modifier.background(MaterialTheme.colorScheme.background)
     ) {
         TopBar(text = "${questionsIndex + 1}/10", modifier = Modifier) {
             navController.navigateUp()
@@ -115,7 +116,7 @@ fun MainScreen(
                 Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
-                    .background(OffWhiteColor)
+                    .background(MaterialTheme.colorScheme.surface)
             ) {
                 Text(text = questions, Modifier.padding(10.dp))
             }
@@ -129,7 +130,7 @@ fun MainScreen(
                     option1 = "Always",
                     option2 = "Usually",
                     option3 = "Sometimes",
-                    option4 = "Rarly",
+                    option4 = "Rarely",
                     option5 = "Never"
                 )
             }

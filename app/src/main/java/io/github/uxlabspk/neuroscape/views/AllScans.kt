@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -108,7 +109,7 @@ fun AllScans(
 
     Column(
         Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
     ) {
         TopBar(text = "All Scans", modifier = Modifier.height(54.dp)) {
@@ -138,7 +139,7 @@ fun AllScans(
                         RecentScans(
                             "${report?.reportName}",
                             "${report?.reportResult}",
-                            Modifier.background(OffWhiteColor)
+                            Modifier.background(MaterialTheme.colorScheme.surface)
                         )
                     }
                 }
@@ -155,7 +156,7 @@ fun AllScans(
                     )
                     Text(
                         "No Reports Found",
-                        color = GrayColor,
+                        color = MaterialTheme.colorScheme.surface,
                         fontFamily = SF_Font_Family,
                         fontWeight = FontWeight.Normal
                     )

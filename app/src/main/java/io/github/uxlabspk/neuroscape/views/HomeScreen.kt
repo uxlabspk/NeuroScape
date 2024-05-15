@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,8 +40,10 @@ import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.ScanReports
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
+import io.github.uxlabspk.neuroscape.ui.theme.NeuroScapeTheme
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
+import io.github.uxlabspk.neuroscape.ui.theme.bg_Light
 import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.RecentScans
@@ -111,7 +114,7 @@ fun HomeScreen(
 
     Column(
         Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
     ) {
         TopBar(text = "Home", modifier = Modifier.height(54.dp)) {
@@ -123,7 +126,7 @@ fun HomeScreen(
                 .padding(top = 20.dp)
         ) {
             UserInfo(
-                Modifier.background(OffWhiteColor),
+                Modifier,
                 bitmapImg,
                 user?.userName.toString(),
                 time.toString()
@@ -153,7 +156,7 @@ fun HomeScreen(
                 RecentScans(
                     "${reports?.reportName}",
                     "${reports?.reportResult}",
-                    Modifier.background(OffWhiteColor)
+                    Modifier
                 )
             } else {
                 Column(
@@ -170,7 +173,7 @@ fun HomeScreen(
                         "No Reports Found",
                         fontFamily = SF_Font_Family,
                         fontWeight = FontWeight.Normal,
-                        color = GrayColor
+                        color = MaterialTheme.colorScheme.onPrimary,  // double check here
                     )
                 }
             }

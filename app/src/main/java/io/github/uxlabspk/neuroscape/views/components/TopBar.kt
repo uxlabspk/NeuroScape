@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +29,7 @@ fun TopBar(text: String, modifier: Modifier, onClick: () -> Unit) {
         shadowElevation = 3.dp
     ) {
         Row(
-            modifier.padding(horizontal = 0.dp).background(Color.White),
+            modifier.padding(horizontal = 0.dp).background(MaterialTheme.colorScheme.background),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
@@ -40,6 +41,7 @@ fun TopBar(text: String, modifier: Modifier, onClick: () -> Unit) {
                 text,
                 fontFamily = SF_Font_Family,
                 fontSize = 18.sp,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Center,
                 modifier = Modifier

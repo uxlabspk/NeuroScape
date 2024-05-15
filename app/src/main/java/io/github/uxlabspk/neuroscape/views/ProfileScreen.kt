@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -94,7 +95,7 @@ fun ProfileScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         TopBar(text = "Profile", modifier = Modifier.height(56.dp), { navController.navigateUp() })
         Column(
@@ -115,13 +116,15 @@ fun ProfileScreen(
                 text = user?.userName.toString(),
                 fontSize = 26.sp,
                 fontFamily = SF_Font_Family,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onPrimary
             )
             Text(
                 text = user?.userEmail.toString(),
                 fontSize = 16.sp,
                 fontFamily = SF_Font_Family,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
             AltButton(

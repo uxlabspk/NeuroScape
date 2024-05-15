@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -50,7 +51,7 @@ fun NewScanScreen(
     // Firebase References
     val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-    Column(Modifier.background(Color.White)) {
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "New Scan", modifier = Modifier.height(54.dp)) {
             navController.navigateUp()
         }

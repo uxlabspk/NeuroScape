@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
+import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.ui.theme.RedColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
@@ -35,7 +37,7 @@ fun UserInfo(modifier: Modifier, bitmapImg: ImageBitmap?, username: String, time
         onClick,
         Modifier
             .clip(RoundedCornerShape(8.dp))
-            .fillMaxWidth(),
+            .fillMaxWidth().background(MaterialTheme.colorScheme.surface),
     ) {
         Row(
             modifier = modifier.padding(12.dp),
@@ -45,7 +47,7 @@ fun UserInfo(modifier: Modifier, bitmapImg: ImageBitmap?, username: String, time
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
                     .height(60.dp),
-                painter =  bitmapImg?.let { BitmapPainter(it) } ?: painterResource(id = R.drawable.ic_account),// painterResource(id = R.drawable.ic_logo),
+                painter =  bitmapImg?.let { BitmapPainter(it) } ?: painterResource(id = R.drawable.ic_account),
                 contentDescription = null
             )
             Column(
@@ -73,8 +75,10 @@ fun RecentScans(
     Surface (
         Modifier
             .clip(RoundedCornerShape(8.dp))
-            .fillMaxWidth()
             .padding(vertical = 4.dp)
+            .background(MaterialTheme.colorScheme.surface)
+            .fillMaxWidth()
+
     ) {
         Row(
             modifier = modifier.padding(12.dp),

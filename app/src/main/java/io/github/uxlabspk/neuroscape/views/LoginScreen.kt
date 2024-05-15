@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -64,7 +65,7 @@ fun LoginScreen(
     val isPasswordError = false
     val context = LocalContext.current
 
-    Column(Modifier.background(Color.White)) {
+    Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Login", modifier = Modifier.height(54.dp)) { navController.navigateUp() }
         Column(
             modifier = Modifier
@@ -184,16 +185,18 @@ fun LoginScreen(
                     "Don't have an account? ",
                     fontFamily = SF_Font_Family,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
                 TextButton(
-                    onClick = { navController.navigate("signup") }
+                    onClick = { navController.navigate("signup") },
                 ) {
                     Text(
                         "Create Account",
                         fontFamily = SF_Font_Family,
                         fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
