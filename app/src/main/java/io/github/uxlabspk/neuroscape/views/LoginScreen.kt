@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -64,6 +65,11 @@ fun LoginScreen(
     val isEmailError = false
     val isPasswordError = false
     val context = LocalContext.current
+    fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+        return emailRegex.matches(email)
+    }
+
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Login", modifier = Modifier.height(54.dp)) { navController.navigateUp() }
@@ -82,7 +88,10 @@ fun LoginScreen(
 
             TextField(
                 value = textState,
-                onValueChange = { textState = it },
+                onValueChange = { newText ->
+                    textState = newText
+                    isValidEmail(newText)
+                    },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
@@ -107,6 +116,10 @@ fun LoginScreen(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                )
             )
 
             TextField(
@@ -152,7 +165,8 @@ fun LoginScreen(
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Go
                 ),
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation()

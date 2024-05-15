@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -122,8 +123,12 @@ fun SignupScreen(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
-
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
                 )
+                )
+
 
             TextField(
                 value = email,
@@ -150,9 +155,12 @@ fun SignupScreen(
                     unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
-
                 )
 
             TextField(
@@ -198,7 +206,8 @@ fun SignupScreen(
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Go
                 ),
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation()
