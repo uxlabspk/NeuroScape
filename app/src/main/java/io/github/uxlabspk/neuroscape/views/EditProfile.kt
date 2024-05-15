@@ -141,7 +141,7 @@ fun EditProfile(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your display name...") },
+                label = { Text("Enter your display name...", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Person, contentDescription = "Email Icon")
                 },
@@ -150,13 +150,14 @@ fun EditProfile(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 textStyle = TextStyle(
@@ -173,7 +174,7 @@ fun EditProfile(
                 onValueChange = {
                     email = it
                 },
-                label = { Text(text = "Enter your email...") },
+                label = { Text(text = "Enter your email...", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(
                         Icons.Default.Email,
@@ -182,14 +183,17 @@ fun EditProfile(
                 },
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-                    cursorColor = Color.Black
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 keyboardOptions = KeyboardOptions(

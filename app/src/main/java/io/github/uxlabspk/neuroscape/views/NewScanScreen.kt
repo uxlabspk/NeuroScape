@@ -69,7 +69,7 @@ fun NewScanScreen(
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter report name...") },
+                label = { Text("Enter report name...", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Email Icon")
                 },
@@ -78,13 +78,14 @@ fun NewScanScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,

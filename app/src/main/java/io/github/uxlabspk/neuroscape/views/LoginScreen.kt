@@ -86,7 +86,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your email...") },
+                label = { Text("Enter your email...", color = MaterialTheme.colorScheme.onPrimary) },
                 isError = isEmailError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
@@ -96,13 +96,14 @@ fun LoginScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
@@ -117,7 +118,7 @@ fun LoginScreen(
                     password = it
                 },
                 isError = isPasswordError,
-                label = { Text(text = "Password") },
+                label = { Text(text = "Password", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_password),
@@ -136,14 +137,17 @@ fun LoginScreen(
                 },
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-                    cursorColor = Color.Black
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,

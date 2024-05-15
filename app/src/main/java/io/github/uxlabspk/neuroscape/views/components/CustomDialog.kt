@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,11 +26,8 @@ fun CustomDialog(
     icon: ImageVector,
 ) {
     AlertDialog(
-        containerColor = Color.White,
+        containerColor = MaterialTheme.colorScheme.surface,
 
-        icon = {
-            Icon(icon, contentDescription = "Example Icon")
-        },
         title = {
             Text(dialogTitle, fontFamily = SF_Font_Family, fontWeight = FontWeight.SemiBold)
         },
@@ -38,7 +36,7 @@ fun CustomDialog(
                 dialogText,
                 fontFamily = SF_Font_Family,
                 fontWeight = FontWeight.Medium,
-                color = GrayColor
+                color = MaterialTheme.colorScheme.onPrimary
             )
         },
         onDismissRequest = {

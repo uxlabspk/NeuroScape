@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -49,6 +50,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
+import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
@@ -99,7 +101,7 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your name...") },
+                label = { Text("Enter your name...", color = MaterialTheme.colorScheme.onPrimary) },
                 isError = isUserError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Email Icon")
@@ -109,13 +111,14 @@ fun SignupScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
@@ -128,7 +131,7 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your name...") },
+                label = { Text("Enter your name...", color = MaterialTheme.colorScheme.onPrimary) },
                 isError = isEmailError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
@@ -138,13 +141,14 @@ fun SignupScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
@@ -160,7 +164,7 @@ fun SignupScreen(
                     password = it
                 },
                 isError = isPasswordError,
-                label = { Text(text = "Password") },
+                label = { Text(text = "Password", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_password),
@@ -179,14 +183,17 @@ fun SignupScreen(
                 },
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-                    cursorColor = Color.Black
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
@@ -270,4 +277,6 @@ fun SignupScreen(
         }
     }
 }
+
+
 
