@@ -79,7 +79,7 @@ fun QuestionsScreen() {
         ) {
             LazyColumn {
                 items(10) {
-                    Questions(title = questionsList[it])
+                    Questions(title = questionsList[it], it)
                 }
             }
         }
@@ -102,7 +102,7 @@ fun QuestionsScreen() {
 }
 
 @Composable
-fun Questions(title: String) {
+fun Questions(title: String, index: Int) {
     Column {
         Box(
             Modifier
@@ -110,7 +110,7 @@ fun Questions(title: String) {
                 .clip(RoundedCornerShape(12.dp))
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            Text(text = title, Modifier.padding(10.dp))
+            Text("Q${index + 1}. $title", Modifier.padding(10.dp))
         }
         McqsRadioButton(
             option1 = "Always",
