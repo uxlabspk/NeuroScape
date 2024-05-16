@@ -50,7 +50,6 @@ import java.nio.ByteBuffer
 import java.util.Arrays
 
 
-
 @Composable
 fun QuestionsScreen() {
     var questionsList = listOf(
@@ -89,25 +88,37 @@ fun QuestionsScreen() {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            PrimaryButton(text = "Generate", modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+            PrimaryButton(
+                text = "Generate",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
 
             }
         }
     }
-    
+
 }
 
 @Composable
 fun Questions(title: String) {
     Column {
-        Text(title)
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.surface)
+        ) {
+            Text(text = title, Modifier.padding(10.dp))
+        }
         McqsRadioButton(
-                    option1 = "Always",
-                    option2 = "Usually",
-                    option3 = "Sometimes",
-                    option4 = "Rarely",
-                    option5 = "Never"
-                )
+            option1 = "Always",
+            option2 = "Usually",
+            option3 = "Sometimes",
+            option4 = "Rarely",
+            option5 = "Never"
+        )
     }
 }
 
