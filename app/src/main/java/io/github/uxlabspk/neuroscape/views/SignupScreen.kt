@@ -74,10 +74,9 @@ fun SignupScreen(
         if (passwordVisibility) painterResource(id = R.drawable.ic_visible)
         else painterResource(id = R.drawable.ic_invisible)
 
-    val isUserError = false
-    val isEmailError = false
-    val isPasswordError = false
-
+    var isNameError by remember { mutableStateOf(false) }
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
 
@@ -103,7 +102,7 @@ fun SignupScreen(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
                 label = { Text("Enter your name...", color = MaterialTheme.colorScheme.onPrimary) },
-                isError = isUserError,
+                isError = isNameError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Email Icon")
                 },
@@ -127,7 +126,7 @@ fun SignupScreen(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 )
-                )
+            )
 
 
             TextField(
@@ -136,7 +135,12 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your name...", color = MaterialTheme.colorScheme.onPrimary) },
+                label = {
+                    Text(
+                        "Enter your email...",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
                 isError = isEmailError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
@@ -161,7 +165,7 @@ fun SignupScreen(
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
-                )
+            )
 
             TextField(
                 modifier = Modifier
@@ -214,47 +218,63 @@ fun SignupScreen(
             )
 
             PrimaryButton(text = "Sign up", modifier = Modifier.fillMaxWidth()) {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener() { task ->
-                        if (task.isSuccessful) {
-                            val date = LocalDateTime.now()
-                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                            val user = User(username, email, date)
-                            FirebaseDatabase.getInstance().getReference()
-                                .child("Users")
-                                .child(
-                                    FirebaseAuth
-                                        .getInstance()
-                                        .uid.toString()
-                                )
-                                .child("Profile")
-                                .setValue(user)
-                                .addOnSuccessListener {
-                                    navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
-                                        if (navDestination.route == "signup") {
-                                            Toast.makeText(
-                                                context,
-                                                "Authentication successful",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            navController.navigate("home")
-                                        }
+                if (isValidName(username)) {
+                    isNameError = false
+                    if (isValidEmail(email)) {
+                        isEmailError = false
+                        if (isValidPassword(password)) {
+                            isPasswordError = false
+                            FirebaseAuth.getInstance()
+                                .createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener() { task ->
+                                    if (task.isSuccessful) {
+                                        val date = LocalDateTime.now()
+                                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                                        val user = User(username, email, date)
+                                        FirebaseDatabase.getInstance().getReference()
+                                            .child("Users")
+                                            .child(
+                                                FirebaseAuth
+                                                    .getInstance()
+                                                    .uid.toString()
+                                            )
+                                            .child("Profile")
+                                            .setValue(user)
+                                            .addOnSuccessListener {
+                                                navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+                                                    if (navDestination.route == "signup") {
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Authentication successful",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        navController.navigate("home")
+                                                    }
+                                                }
+                                            }.addOnFailureListener {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Something abc went wrong : ${task.exception?.message}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Something ghv went wrong : ${task.exception?.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                }.addOnFailureListener {
-                                    Toast.makeText(
-                                        context,
-                                        "Something abc went wrong : ${task.exception?.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
                                 }
                         } else {
-                            Toast.makeText(
-                                context,
-                                "Something ghv went wrong : ${task.exception?.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            isPasswordError = true
                         }
+                    } else {
+                        isEmailError = true
                     }
+                } else {
+                    isNameError = true
+                }
             }
 
             Row(
@@ -287,5 +307,18 @@ fun SignupScreen(
     }
 }
 
+private fun isValidName(name: String): Boolean {
+    // Regex("")
+    val usernameRegex = "^[A-Za-z]+(?: [A-Za-z]+)+\$".toRegex()
+    return usernameRegex.matches(name)
+}
 
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+    return emailRegex.matches(email)
+}
+
+private fun isValidPassword(password: String): Boolean {
+    return (password.length >= 8)
+}
 

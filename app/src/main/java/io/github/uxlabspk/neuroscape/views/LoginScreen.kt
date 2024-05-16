@@ -62,13 +62,9 @@ fun LoginScreen(
         else painterResource(id = R.drawable.ic_invisible)
 
     // variables
-    val isEmailError = false
-    val isPasswordError = false
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    fun isValidEmail(email: String): Boolean {
-        val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
-        return emailRegex.matches(email)
-    }
 
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -100,6 +96,7 @@ fun LoginScreen(
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
                 },
+
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
@@ -173,24 +170,35 @@ fun LoginScreen(
             )
 
             PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth()) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
-                    .addOnCompleteListener() { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.addOnDestinationChangedListener { controller, destination, _ ->
-                                if (destination.route == "signin") {
-                                    controller.navigate("home")
+                if (isValidEmail(textState)) {
+                    isEmailError = false
+                    if (isValidPassword(password)) {
+                        isPasswordError = false
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
+                            .addOnCompleteListener() { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)
+                                        .show()
+                                    navController.addOnDestinationChangedListener { controller, destination, _ ->
+                                        if (destination.route == "signin") {
+                                            controller.navigate("home")
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Authentication failed: ${task.exception?.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Authentication failed: ${task.exception?.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    } else {
+                        isPasswordError = true
                     }
+                } else {
+                    isEmailError = true
+                }
+
             }
             Row(
                 modifier = Modifier
@@ -221,4 +229,15 @@ fun LoginScreen(
 
         }
     }
+}
+
+
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+    return emailRegex.matches(email)
+}
+
+
+private fun isValidPassword(password: String): Boolean {
+    return (password.length >= 8)
 }

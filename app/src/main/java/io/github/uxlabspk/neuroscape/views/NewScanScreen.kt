@@ -47,6 +47,7 @@ fun NewScanScreen(
 
     // variables
     val context = LocalContext.current
+    var isReportError by remember { mutableStateOf(false) }
 
     // Firebase References
     val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -73,6 +74,7 @@ fun NewScanScreen(
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Email Icon")
                 },
+                isError = isReportError,
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
@@ -92,17 +94,21 @@ fun NewScanScreen(
 
                 )
             PrimaryButton(text = "Start", modifier = Modifier.fillMaxWidth()) {
-                val date =
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                val scanReport = ScanReports(reportName, date, "")
-                FirebaseDatabase.getInstance().getReference().child("Users").child(uid.toString())
-                    .child("Reports").child(System.currentTimeMillis().toString())
-                    .setValue(scanReport).addOnSuccessListener {
-                    navController.navigate("questionsScreen")
-                }.addOnFailureListener {
-                    Toast.makeText(context, "Something wents wrong.", Toast.LENGTH_SHORT).show()
+                if (reportName.isNotEmpty()) {
+                    isReportError = false
+                    val date =
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                    val scanReport = ScanReports(reportName, date, "")
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(uid.toString())
+                        .child("Reports").child(System.currentTimeMillis().toString())
+                        .setValue(scanReport).addOnSuccessListener {
+                            navController.navigate("questionsScreen")
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "Something wents wrong.", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    isReportError = true
                 }
-
             }
 
         }
