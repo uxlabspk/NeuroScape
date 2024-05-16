@@ -41,6 +41,7 @@ import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.views.components.McqsRadioButton
 import io.github.uxlabspk.neuroscape.views.components.NavigationButton
+import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
@@ -65,11 +66,32 @@ fun QuestionsScreen() {
         "Does your child stare at nothing with no apparent purpose?",
     )
 
+    Column(
+        Modifier.background(MaterialTheme.colorScheme.background)
+    ) {
+        TopBar(text = "Scan Questions", modifier = Modifier) {
+            // navController.navigateUp()
+        }
+        Column(
+            Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp)
+                .fillMaxHeight(9 / 10f)
+        ) {
+            LazyColumn {
+                items(10) {
+                    Questions(title = questionsList[it])
+                }
+            }
+        }
+        Row(
+            Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            PrimaryButton(text = "Generate", modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
 
-
-    LazyColumn {
-        items(10) {
-            Questions(title = questionsList[it])
+            }
         }
     }
     
@@ -94,34 +116,6 @@ fun Questions(title: String) {
 fun PreviewQS() {
     QuestionsScreen()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //
 //@Composable
