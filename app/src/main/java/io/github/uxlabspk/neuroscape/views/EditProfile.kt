@@ -45,7 +45,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -88,21 +92,6 @@ fun EditProfile(
     val storageRef = FirebaseStorage.getInstance().getReference("images/")
     val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
-    databaseRef.child(userId.toString()).child("Profile").addValueEventListener(object :
-        ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            if (snapshot.exists()) {
-                user = snapshot.getValue(User::class.java)
-                username = user?.userName.toString()
-                email = user?.userEmail.toString()
-                lastScan = user?.lastScan.toString()
-            } else {
-                Log.d("Error", "Invalid snapshot")
-            }
-        }
-
-        override fun onCancelled(error: DatabaseError) {}
-    })
 
 
     Column(
@@ -202,6 +191,32 @@ fun EditProfile(
             )
 
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
+                FirebaseAuth.getInstance().currentUser!!.verifyBeforeUpdateEmail(email)
+                    .addOnCompleteListener() { emailUpdate ->
+                        if (emailUpdate.isSuccessful) {
+                            Toast.makeText(
+                                context,
+                                "Verification email is sent to your gmail. Please verify to continue",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Something went wrong. ",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(
+                            context,
+                            "Something went wrong. ",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+
+
                 selectedImageUri.value?.let {
                     userProfileImg.putFile(it).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
