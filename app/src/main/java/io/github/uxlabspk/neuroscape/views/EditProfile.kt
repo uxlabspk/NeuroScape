@@ -199,6 +199,7 @@ fun EditProfile(
                                 "Verification email is sent to your gmail. Please verify to continue",
                                 Toast.LENGTH_SHORT
                             ).show()
+
                         } else {
                             Toast.makeText(
                                 context,
