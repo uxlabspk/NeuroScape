@@ -69,8 +69,6 @@ fun EditProfile(
     // states
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
-    var lastScan by remember { mutableStateOf("") }
-    var user by remember { mutableStateOf<User?>(null) }
     val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<ImageBitmap?>(null) }
 
@@ -194,6 +192,8 @@ fun EditProfile(
                 FirebaseAuth.getInstance().currentUser!!.verifyBeforeUpdateEmail(email)
                     .addOnCompleteListener() { emailUpdate ->
                         if (emailUpdate.isSuccessful) {
+                            val user = User(userEmail = email, userName = username)
+                            databaseRef.child(userId.toString()).child("Profile").setValue(user)
                             Toast.makeText(
                                 context,
                                 "Verification email is sent to your gmail. Please verify to continue",
