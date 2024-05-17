@@ -27,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.data.Questions
+import io.github.uxlabspk.neuroscape.data.ScanReports
 import io.github.uxlabspk.neuroscape.ml.Model
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
@@ -114,15 +116,38 @@ fun QuestionsScreen(
                     val arg = result == 1
                     Log.d("a", arg.toString())
 
-                    navController.navigate("result/$arg")
+                    updateDatabase(mappedList.sum())
 
-//                    Log.d("Size", "QuestionsScreen: $mappedList")
+                    navController.navigate("result/$arg")
                 } else {
                     Toast.makeText(context, "Please fill all questions before proceeding", Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
+}
+
+private fun updateDatabase(sum: Int) {
+    val databaseRef = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports")
+
+    databaseRef.limitToLast(1).get().addOnSuccessListener {datasnapshot ->
+        for (childSnapshot in datasnapshot.children) {
+            val scanReport = childSnapshot.getValue(ScanReports::class.java)
+            scanReport?.reportResult = sum.toString()
+
+            databaseRef.child(childSnapshot.key.toString()).setValue(scanReport)
+        }
+    }
+
+//        .addValueEventListener(object: ValueEventListener {
+//        override fun onDataChange(snapshot: DataSnapshot) {
+//            val scanReports = snapshot.getValue(ScanReports::class.java)
+//
+//            Log.d("TAG", "onDataChange: ${scanReports?.reportName}")
+//        }
+//
+//        override fun onCancelled(error: DatabaseError) { TODO("Not yet implemented") }
+//    })
 }
 
 @Composable
