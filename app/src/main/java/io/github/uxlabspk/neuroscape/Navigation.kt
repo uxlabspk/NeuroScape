@@ -2,9 +2,11 @@ package io.github.uxlabspk.neuroscape
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import io.github.uxlabspk.neuroscape.views.AllScans
 import io.github.uxlabspk.neuroscape.views.EditProfile
@@ -57,11 +59,20 @@ fun NeuroScapeNavHost(
             NewScanScreen(navController = navController)
         }
         composable("questionsScreen") {
-            // QuestionsScreen(navController = navController)
-            QuestionsScreen()
+            QuestionsScreen(navController = navController)
         }
-        composable("result") {
-            ScanResults(navController = navController, isAutismTraits = true)
+//        composable("result") {
+//            ScanResults(navController = navController, isAutismTraits = true)
+//        }
+        composable(
+            route = "result/{argument}",
+            arguments = listOf(navArgument("argument") { type = NavType.BoolType })
+        ) { backStackEntry ->
+            val argument = backStackEntry.arguments?.getBoolean("argument")
+            if (argument != null) {
+                ScanResults(navController = navController, isAutismTraits = argument)
+            }
+            //ScreenB(navController = navController, argument = argument)
         }
         composable("profile") {
             ProfileScreen(navController = navController)

@@ -1,6 +1,7 @@
 package io.github.uxlabspk.neuroscape.views
 
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -28,14 +29,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.github.uxlabspk.neuroscape.data.Questions
+import io.github.uxlabspk.neuroscape.ml.Model
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
+import org.tensorflow.lite.DataType
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 
 @Composable
-fun QuestionsScreen() {
+fun QuestionsScreen(
+    navController: NavController
+) {
     val context = LocalContext.current
 
     val questions = listOf(
@@ -57,7 +64,7 @@ fun QuestionsScreen() {
         modifier = Modifier.background(MaterialTheme.colorScheme.background)
     ) {
         TopBar(text = "Scan Questions", modifier = Modifier) {
-            // navigation
+            navController.navigateUp()
         }
         Column(
             Modifier
@@ -96,7 +103,20 @@ fun QuestionsScreen() {
                     .padding(horizontal = 20.dp)
             ) {
                 if (isValidArray(selectedAnswers)) {
-                    Log.d("Size", "QuestionsScreen: $selectedAnswers")
+                    val mappedList = selectedAnswers.mapIndexed { index, value ->
+                        when {
+                            index < 9 -> if (value in 2..4) 1 else 0
+                            else -> if (value in 0..2) 1 else 0
+                        }
+                    }
+                    val mappedArray = mappedList.map { it.toFloat() }.toFloatArray() // mappedList.toFloatArray()
+                    val result = modelRead(context, mappedArray) // 1/0
+                    val arg = result == 1
+                    Log.d("a", arg.toString())
+
+                    navController.navigate("result/$arg")
+
+//                    Log.d("Size", "QuestionsScreen: $mappedList")
                 } else {
                     Toast.makeText(context, "Please fill all questions before proceeding", Toast.LENGTH_LONG).show()
                 }
@@ -148,11 +168,28 @@ private fun isValidArray(array: List<Int>): Boolean {
     return array.all { it != -1 && it <= 4 }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
+fun modelRead(context: Context, questionAnswers: FloatArray): Int {
+    val model = Model.newInstance(context)
 
-    QuestionsScreen()
+    // Creates inputs for reference.
+    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 10), DataType.FLOAT32)
+
+    inputFeature0.loadArray(questionAnswers) //.loadArray(questionAnswers) //(floatArrayOf(0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F))
+
+    // Runs model inference and gets result.
+    val outputs = model.process(inputFeature0)
+    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+
+    val floatArray: FloatArray = outputFeature0.floatArray
+    val intArray: IntArray = floatArray.map { it.toInt() }.toIntArray()
+
+
+    // Showing the output to logcat
+    Log.d("Output", intArray[0].toString())
+
+    model.close()
+
+    return intArray[0]
 }
 
 
@@ -269,25 +306,4 @@ fun DefaultPreview() {
 //    }
 //}
 //
-//fun modelRead(context: Context) {
-//    val model = Model.newInstance(context)
-//
-//    // Creates inputs for reference.
-//    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 10), DataType.FLOAT32)
-//
-//    inputFeature0.loadArray(floatArrayOf(0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F))
-//
-//    // Runs model inference and gets result.
-//    val outputs = model.process(inputFeature0)
-//    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
-//
-//    val floatArray: FloatArray = outputFeature0.floatArray
-//    val intArray: IntArray = floatArray.map { it.toInt() }.toIntArray()
-//
-//
-//    // Showing the output to logcat
-//    Log.d("Output", intArray[0].toString())
-//
-//    model.close()
-//}
 
