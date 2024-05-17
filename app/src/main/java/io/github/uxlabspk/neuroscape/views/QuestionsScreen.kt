@@ -1,26 +1,21 @@
 package io.github.uxlabspk.neuroscape.views
 
-import android.content.Context
+
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,64 +24,70 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import io.github.uxlabspk.neuroscape.ml.Model
+import io.github.uxlabspk.neuroscape.data.Questions
 import io.github.uxlabspk.neuroscape.ui.theme.BlueColor
-import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
-import io.github.uxlabspk.neuroscape.views.components.McqsRadioButton
-import io.github.uxlabspk.neuroscape.views.components.NavigationButton
+import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import org.tensorflow.lite.DataType
-import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.nio.ByteBuffer
-import java.util.Arrays
-
 
 @Composable
 fun QuestionsScreen() {
-    var questionsList = listOf(
-        "Does your child look at you when you call his/her name?",
-        "How easy is it for you to get eye contact with your child?",
-        "Does your child point to indicate that s/he wants something? (e.g. a toy that is out of reach)",
-        "Does your child point to share interest with you? (e.g. pointing at an interesting sight)",
-        "Does your child pretend? (e.g. care for dolls, talk on a toy phone)",
-        "Does your child follow where you’re looking?",
-        "If you or someone else in the family is visibly upset, does your child show signs of wanting to comfort them? (e.g. stroking hair, hugging them)",
-        "Would you describe your child’s first words as:",
-        "Does your child use simple gestures? (e.g. wave goodbye)",
-        "Does your child stare at nothing with no apparent purpose?",
+    val context = LocalContext.current
+
+    val questions = listOf(
+        Questions(id = 0, text = "Does your child look at you when you call his/her name?"),
+        Questions(id = 1, text = "How easy is it for you to get eye contact with your child?"),
+        Questions(id = 2, text = "Does your child point to indicate that s/he wants something? (e.g. a toy that is out of reach)"),
+        Questions(id = 3, text = "Does your child point to share interest with you? (e.g. pointing at an interesting sight)"),
+        Questions(id = 4, text = "Does your child pretend? (e.g. care for dolls, talk on a toy phone)"),
+        Questions(id = 5, text = "Does your child follow where you’re looking?"),
+        Questions(id = 6, text = "If you or someone else in the family is visibly upset, does your child show signs of wanting to comfort them? (e.g. stroking hair, hugging them)"),
+        Questions(id = 7, text = "Would you describe your child’s first words as : "),
+        Questions(id = 8, text = "Does your child use simple gestures? (e.g. wave goodbye)"),
+        Questions(id = 9, text = "Does your child stare at nothing with no apparent purpose?"),
     )
 
+    var selectedAnswers by remember { mutableStateOf(List(questions.size) { -1 }) }
+
     Column(
-        Modifier.background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.background(MaterialTheme.colorScheme.background)
     ) {
         TopBar(text = "Scan Questions", modifier = Modifier) {
-            // navController.navigateUp()
+            // navigation
         }
         Column(
             Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
-                .fillMaxHeight(9 / 10f)
+                .fillMaxSize(9 / 10f)
         ) {
-            LazyColumn {
-                items(10) {
-                    Questions(title = questionsList[it], it)
+
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                itemsIndexed(questions) { index, question ->
+                    QuestionItem(
+                        question = question,
+                        selectedAnswer = selectedAnswers[index]
+                    ) { answer ->
+                        selectedAnswers = selectedAnswers.toMutableList().also {
+                            it[index] = answer
+                        }
+                    }
                 }
             }
         }
+
         Row(
             Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             PrimaryButton(
                 text = "Generate",
@@ -94,39 +95,66 @@ fun QuestionsScreen() {
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-
+                if (isValidArray(selectedAnswers)) {
+                    Log.d("Size", "QuestionsScreen: $selectedAnswers")
+                } else {
+                    Toast.makeText(context, "Please fill all questions before proceeding", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
-
 }
 
 @Composable
-fun Questions(title: String, index: Int) {
-    Column {
-        Box(
-            Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.surface)
-        ) {
-            Text("Q${index + 1}. $title", Modifier.padding(10.dp))
-        }
-        McqsRadioButton(
-            option1 = "Always",
-            option2 = "Usually",
-            option3 = "Sometimes",
-            option4 = "Rarely",
-            option5 = "Never"
+fun QuestionItem(
+    question: Questions,
+    selectedAnswer: Int,
+    onAnswerSelected: (Int) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
+    ) {
+        Text(
+            text = "Q${question.id + 1}. ${question.text}",
+            modifier = Modifier.padding(bottom = 8.dp),
+            fontFamily = SF_Font_Family,
+            fontWeight = FontWeight.Medium
         )
+        question.options.forEachIndexed { index, option ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(
+                    selected = index == selectedAnswer,
+                    onClick = { onAnswerSelected(index) },
+                    colors = RadioButtonDefaults.colors(BlueColor),
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+                Text(
+                    text = option,
+                    modifier = Modifier,
+                    fontFamily = SF_Font_Family
+                )
+            }
+        }
     }
 }
 
-@Preview(showSystemUi = true)
+private fun isValidArray(array: List<Int>): Boolean {
+    return array.all { it != -1 && it <= 4 }
+}
+
+@Preview(showBackground = true)
 @Composable
-fun PreviewQS() {
+fun DefaultPreview() {
+
     QuestionsScreen()
 }
+
 
 //
 //@Composable
