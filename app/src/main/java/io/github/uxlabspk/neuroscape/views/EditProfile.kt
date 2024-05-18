@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -97,6 +98,7 @@ fun EditProfile(
                 Image(
                     bitmap = it,
                     contentDescription = "Selected Image",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(120.dp)
                         .clip(RoundedCornerShape(100.dp))
@@ -139,23 +141,25 @@ fun EditProfile(
             )
 
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
-                databaseRef.child(userId.toString()).child("Profile").child("userName").setValue(username)
-                    .addOnCompleteListener() {task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(
-                                context,
-                                "Username Successfully Updated.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            username = ""
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Something went wrong",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                if(username.isNotEmpty()){
+                    databaseRef.child(userId.toString()).child("Profile").child("userName").setValue(username)
+                        .addOnCompleteListener() {task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    context,
+                                    "Username Successfully Updated.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                username = ""
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Something went wrong",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                    }
+                }
 
                 selectedImageUri.value?.let {
                     userProfileImg.putFile(it).addOnCompleteListener { task ->

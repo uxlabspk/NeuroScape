@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -107,10 +108,12 @@ fun ProfileScreen(
             Image(
                 painter = bitmapImg?.let { BitmapPainter(it) }
                     ?: painterResource(id = R.drawable.ic_account),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
                     .size(120.dp),
                 contentDescription = null
+                ,
             )
             Text(
                 text = user?.userName.toString(),
