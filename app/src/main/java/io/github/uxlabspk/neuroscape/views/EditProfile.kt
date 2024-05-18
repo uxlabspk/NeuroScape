@@ -3,6 +3,7 @@ package io.github.uxlabspk.neuroscape.views
 import android.content.ContentResolver
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,6 +49,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
+import io.github.uxlabspk.neuroscape.views.components.ProgressDialog
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 
@@ -59,6 +61,7 @@ fun EditProfile(
     var username by remember { mutableStateOf("") }
     val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<ImageBitmap?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
     // variables
     val context = LocalContext.current
@@ -77,6 +80,8 @@ fun EditProfile(
     val userId = FirebaseAuth.getInstance().currentUser?.uid
     val storageRef = FirebaseStorage.getInstance().getReference("images/")
     val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+
+    ProgressDialog(isLoading, "Updating")
 
     Column(
         modifier = Modifier
@@ -141,7 +146,7 @@ fun EditProfile(
             )
 
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
-                if(username.isNotEmpty()){
+                if(username.isNotEmpty()) {
                     databaseRef.child(userId.toString()).child("Profile").child("userName").setValue(username)
                         .addOnCompleteListener() {task ->
                             if (task.isSuccessful) {
@@ -161,15 +166,19 @@ fun EditProfile(
                         }
                 }
 
+                isLoading = true
                 selectedImageUri.value?.let {
-                    userProfileImg.putFile(it).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
+                    userProfileImg.putFile(it).addOnSuccessListener {
+                        userProfileImg.downloadUrl.addOnSuccessListener {uri ->
+                            databaseRef.child(userId.toString()).child("Profile").child("userPhotoUrl").setValue(uri.toString())
+                            isLoading = false
                             Toast.makeText(
                                 context,
                                 "Profile Successfully Updated.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+
                     }
                 }
             }

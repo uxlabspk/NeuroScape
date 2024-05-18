@@ -235,7 +235,7 @@ fun SignupScreen(
                                     if (task.isSuccessful) {
                                         val date = LocalDateTime.now()
                                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                                        val user = User(username, email, date)
+                                        val user = User(username, email, "", date)
                                         FirebaseDatabase.getInstance().getReference()
                                             .child("Users")
                                             .child(
