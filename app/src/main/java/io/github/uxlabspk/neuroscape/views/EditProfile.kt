@@ -3,7 +3,6 @@ package io.github.uxlabspk.neuroscape.views
 import android.content.ContentResolver
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,9 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -42,25 +39,16 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.auth
-import com.google.firebase.auth.userProfileChangeRequest
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import java.io.File
+
 
 @Composable
 fun EditProfile(
@@ -68,7 +56,6 @@ fun EditProfile(
 ) {
     // states
     var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
     val selectedImageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<ImageBitmap?>(null) }
 
@@ -89,8 +76,6 @@ fun EditProfile(
     val userId = FirebaseAuth.getInstance().currentUser?.uid
     val storageRef = FirebaseStorage.getInstance().getReference("images/")
     val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
-
-
 
     Column(
         modifier = Modifier
@@ -153,79 +138,31 @@ fun EditProfile(
                 )
             )
 
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                value = email,
-                onValueChange = {
-                    email = it
-                },
-                label = { Text(text = "Enter your email...", color = MaterialTheme.colorScheme.onPrimary) },
-                leadingIcon = {
-                    Icon(
-                        Icons.Default.Email,
-                        contentDescription = "Email Icon"
-                    )
-                },
-                colors = TextFieldDefaults.colors(
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedLabelColor = Color.DarkGray,
-                    focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
-                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
-                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = MaterialTheme.colorScheme.surface,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                    cursorColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = RoundedCornerShape(5.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                )
-            )
-
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
-                FirebaseAuth.getInstance().currentUser!!.verifyBeforeUpdateEmail(email)
-                    .addOnCompleteListener() { emailUpdate ->
-                        if (emailUpdate.isSuccessful) {
-                            val user = User(userEmail = email, userName = username)
-                            databaseRef.child(userId.toString()).child("Profile").setValue(user)
+                databaseRef.child(userId.toString()).child("Profile").child("userName").setValue(username)
+                    .addOnCompleteListener() {task ->
+                        if (task.isSuccessful) {
                             Toast.makeText(
                                 context,
-                                "Verification email is sent to your gmail. Please verify to continue",
+                                "Username Successfully Updated.",
                                 Toast.LENGTH_SHORT
                             ).show()
-
+                            username = ""
                         } else {
                             Toast.makeText(
                                 context,
-                                "Something went wrong. ",
+                                "Something went wrong",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
                     }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            context,
-                            "Something went wrong. ",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-
 
                 selectedImageUri.value?.let {
                     userProfileImg.putFile(it).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-//                            val localFile = File(context.filesDir, "image.jpg")
-//                            localFile.delete()
                             Toast.makeText(
                                 context,
-                                "Profile Successfully Updated. ",
+                                "Profile Successfully Updated.",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
