@@ -156,7 +156,7 @@ fun AllScans(
                     )
                     Text(
                         "No Reports Found",
-                        color = MaterialTheme.colorScheme.surface,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontFamily = SF_Font_Family,
                         fontWeight = FontWeight.Normal
                     )
