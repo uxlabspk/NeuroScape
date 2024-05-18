@@ -82,29 +82,32 @@ fun AllScans(
     }
 
     if (isConfirmed) {
-        CustomDialog(
-            onDismissRequest = {
-                isConfirmed = false
-            },
-            onConfirmation = {
-                isConfirmed = false
-                FirebaseDatabase.getInstance().getReference().child("Users")
-                    .child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports")
-                    .removeValue().addOnSuccessListener {
-                    Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
-                    reports = emptyList()
-                }.addOnFailureListener {
-                    Toast.makeText(
-                        context,
-                        "Unknown Error Occur!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            },
-            dialogTitle = "Confirm",
-            dialogText = "Are you sure to delete?",
-            icon = Icons.Default.CheckCircle
-        )
+        if (reports.isNotEmpty()) {
+            CustomDialog(
+                onDismissRequest = {
+                    isConfirmed = false
+                },
+                onConfirmation = {
+                    isConfirmed = false
+                    FirebaseDatabase.getInstance().getReference().child("Users")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports")
+                        .removeValue().addOnSuccessListener {
+                            Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
+                            reports = emptyList()
+                        }.addOnFailureListener {
+                            Toast.makeText(
+                                context,
+                                "Unknown Error Occur!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                },
+                dialogTitle = "Confirm",
+                dialogText = "Are you sure to delete?",
+                icon = Icons.Default.CheckCircle
+            )
+        }
+
     }
 
     Column(
