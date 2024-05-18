@@ -45,6 +45,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
+import io.github.uxlabspk.neuroscape.views.components.ProgressDialog
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 
@@ -56,6 +57,7 @@ fun LoginScreen(
     var textState by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
 
     val icon =
         if (passwordVisibility) painterResource(id = R.drawable.ic_visible)
@@ -66,6 +68,7 @@ fun LoginScreen(
     var isPasswordError by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    ProgressDialog(isLoading, "Authenticating")
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Login", modifier = Modifier.height(54.dp)) { navController.navigateUp() }
@@ -174,9 +177,11 @@ fun LoginScreen(
                     isEmailError = false
                     if (isValidPassword(password)) {
                         isPasswordError = false
+                        isLoading = true
                         FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
                             .addOnCompleteListener() { task ->
                                 if (task.isSuccessful) {
+                                    isLoading = false
                                     Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)
                                         .show()
                                     navController.addOnDestinationChangedListener { controller, destination, _ ->
@@ -185,6 +190,7 @@ fun LoginScreen(
                                         }
                                     }
                                 } else {
+                                    isLoading = false
                                     Toast.makeText(
                                         context,
                                         "Authentication failed: ${task.exception?.message}",

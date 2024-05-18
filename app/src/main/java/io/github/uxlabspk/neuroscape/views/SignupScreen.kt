@@ -54,6 +54,7 @@ import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
+import io.github.uxlabspk.neuroscape.views.components.ProgressDialog
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -68,6 +69,7 @@ fun SignupScreen(
     var email by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
 
     // variables
     val icon =
@@ -79,6 +81,8 @@ fun SignupScreen(
     var isPasswordError by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+
+    ProgressDialog(isLoading, "Authenticating")
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Sign up", modifier = Modifier.height(54.dp), { navController.navigateUp() })
@@ -224,6 +228,7 @@ fun SignupScreen(
                         isEmailError = false
                         if (isValidPassword(password)) {
                             isPasswordError = false
+                            isLoading = true
                             FirebaseAuth.getInstance()
                                 .createUserWithEmailAndPassword(email, password)
                                 .addOnCompleteListener() { task ->
@@ -243,6 +248,7 @@ fun SignupScreen(
                                             .addOnSuccessListener {
                                                 navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
                                                     if (navDestination.route == "signup") {
+                                                        isLoading = false
                                                         Toast.makeText(
                                                             context,
                                                             "Authentication successful",
