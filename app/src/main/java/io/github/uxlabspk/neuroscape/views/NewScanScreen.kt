@@ -47,6 +47,7 @@ fun NewScanScreen(
 
     // variables
     val context = LocalContext.current
+    var isReportError by remember { mutableStateOf(false) }
 
     // Firebase References
     val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -69,39 +70,49 @@ fun NewScanScreen(
                 Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter report name...") },
+                label = { Text("Enter report name...", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Star, contentDescription = "Email Icon")
                 },
+                isError = isReportError,
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
 
                 )
             PrimaryButton(text = "Start", modifier = Modifier.fillMaxWidth()) {
-                val date =
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                val scanReport = ScanReports(reportName, date, "")
-                FirebaseDatabase.getInstance().getReference().child("Users").child(uid.toString())
-                    .child("Reports").child(System.currentTimeMillis().toString())
-                    .setValue(scanReport).addOnSuccessListener {
-                    navController.navigate("questionsScreen")
-                }.addOnFailureListener {
-                    Toast.makeText(context, "Something wents wrong.", Toast.LENGTH_SHORT).show()
+                if (reportName.isNotEmpty()) {
+                    isReportError = false
+                    val date =
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                    val scanReport = ScanReports(reportName, date, "")
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(uid.toString())
+                        .child("Reports").child(System.currentTimeMillis().toString())
+                        .setValue(scanReport).addOnSuccessListener {
+                            navController.addOnDestinationChangedListener { controller, destination, _ ->
+                                if (destination.route == "newscan") {
+                                    controller.navigate("questionsScreen")
+                                }
+                            }
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "Something wents wrong.", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    isReportError = true
                 }
-
             }
 
         }

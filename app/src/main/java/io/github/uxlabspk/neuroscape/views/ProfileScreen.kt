@@ -25,12 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -78,18 +81,27 @@ fun ProfileScreen(
         })
 
     // if (!localFile.exists()) {
-        userProfileImg.getFile(localFile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-            val imageBitmap = bitmap.asImageBitmap()
-
-            bitmapImg = imageBitmap
-        }
+//        userProfileImg.getFile(localFile).addOnSuccessListener {
+//            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+//            val imageBitmap = bitmap.asImageBitmap()
+//
+//            bitmapImg = imageBitmap
+//        }
 //    } else {
 //        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
 //        val imageBitmap = bitmap.asImageBitmap()
 //
 //        bitmapImg = imageBitmap
 //    }
+
+
+    val painter: Painter = if (user?.userPhotoUrl.toString().isNotEmpty())
+        rememberImagePainter(data = user?.userPhotoUrl.toString())
+    else
+        painterResource(id = R.drawable.ic_account)
+
+
+
 
 
     Column(
@@ -105,12 +117,14 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = bitmapImg?.let { BitmapPainter(it) }
-                    ?: painterResource(id = R.drawable.ic_account),
+                // painter = bitmapImg?.let { BitmapPainter(it) }
+                //    ?: painterResource(id = R.drawable.ic_account),
+                painter = painter, // painter ?: painterResource(id = R.drawable.ic_account),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
                     .size(120.dp),
-                contentDescription = null
+                contentDescription = "Profile photo"
             )
             Text(
                 text = user?.userName.toString(),

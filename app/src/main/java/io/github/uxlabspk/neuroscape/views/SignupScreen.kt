@@ -38,9 +38,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -49,8 +51,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
+import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
+import io.github.uxlabspk.neuroscape.views.components.ProgressDialog
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -65,18 +69,20 @@ fun SignupScreen(
     var email by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
 
     // variables
     val icon =
         if (passwordVisibility) painterResource(id = R.drawable.ic_visible)
         else painterResource(id = R.drawable.ic_invisible)
 
-    val isUserError = false
-    val isEmailError = false
-    val isPasswordError = false
-
+    var isNameError by remember { mutableStateOf(false) }
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+
+    ProgressDialog(isLoading, "Authenticating")
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Sign up", modifier = Modifier.height(54.dp), { navController.navigateUp() })
@@ -99,8 +105,8 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your name...") },
-                isError = isUserError,
+                label = { Text("Enter your name...", color = MaterialTheme.colorScheme.onPrimary) },
+                isError = isNameError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Email Icon")
                 },
@@ -109,18 +115,23 @@ fun SignupScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
-
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
                 )
+            )
+
 
             TextField(
                 value = email,
@@ -128,7 +139,12 @@ fun SignupScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your name...") },
+                label = {
+                    Text(
+                        "Enter your email...",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
                 isError = isEmailError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
@@ -138,18 +154,22 @@ fun SignupScreen(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
-
-                )
+            )
 
             TextField(
                 modifier = Modifier
@@ -160,7 +180,7 @@ fun SignupScreen(
                     password = it
                 },
                 isError = isPasswordError,
-                label = { Text(text = "Password") },
+                label = { Text(text = "Password", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_password),
@@ -179,66 +199,89 @@ fun SignupScreen(
                 },
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-                    cursorColor = Color.Black
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Go
                 ),
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation()
             )
 
             PrimaryButton(text = "Sign up", modifier = Modifier.fillMaxWidth()) {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener() { task ->
-                        if (task.isSuccessful) {
-                            val date = LocalDateTime.now()
-                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                            val user = User(username, email, date)
-                            FirebaseDatabase.getInstance().getReference()
-                                .child("Users")
-                                .child(
-                                    FirebaseAuth
-                                        .getInstance()
-                                        .uid.toString()
-                                )
-                                .child("Profile")
-                                .setValue(user)
-                                .addOnSuccessListener {
-                                    navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
-                                        if (navDestination.route == "signup") {
-                                            Toast.makeText(
-                                                context,
-                                                "Authentication successful",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            navController.navigate("home")
-                                        }
+                if (isValidName(username)) {
+                    isNameError = false
+                    if (isValidEmail(email)) {
+                        isEmailError = false
+                        if (isValidPassword(password)) {
+                            isPasswordError = false
+                            isLoading = true
+                            FirebaseAuth.getInstance()
+                                .createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener() { task ->
+                                    if (task.isSuccessful) {
+                                        val date = LocalDateTime.now()
+                                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                                        val user = User(username, email, "", date)
+                                        FirebaseDatabase.getInstance().getReference()
+                                            .child("Users")
+                                            .child(
+                                                FirebaseAuth
+                                                    .getInstance()
+                                                    .uid.toString()
+                                            )
+                                            .child("Profile")
+                                            .setValue(user)
+                                            .addOnSuccessListener {
+                                                navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+                                                    if (navDestination.route == "signup") {
+                                                        isLoading = false
+                                                        Toast.makeText(
+                                                            context,
+                                                            "Authentication successful",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        navController.navigate("home")
+                                                    }
+                                                }
+                                            }.addOnFailureListener {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Something abc went wrong : ${task.exception?.message}",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    } else {
+                                        isLoading = false
+                                        Toast.makeText(
+                                            context,
+                                            "Something Went Wrong : ${task.exception?.message}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                }.addOnFailureListener {
-                                    Toast.makeText(
-                                        context,
-                                        "Something abc went wrong : ${task.exception?.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
                                 }
                         } else {
-                            Toast.makeText(
-                                context,
-                                "Something ghv went wrong : ${task.exception?.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            isPasswordError = true
                         }
+                    } else {
+                        isEmailError = true
                     }
+                } else {
+                    isNameError = true
+                }
             }
 
             Row(
@@ -269,5 +312,20 @@ fun SignupScreen(
 
         }
     }
+}
+
+private fun isValidName(name: String): Boolean {
+    // Regex("")
+    val usernameRegex = "^[A-Za-z]+(?: [A-Za-z]+)+\$".toRegex()
+    return usernameRegex.matches(name)
+}
+
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+    return emailRegex.matches(email)
+}
+
+private fun isValidPassword(password: String): Boolean {
+    return (password.length >= 8)
 }
 

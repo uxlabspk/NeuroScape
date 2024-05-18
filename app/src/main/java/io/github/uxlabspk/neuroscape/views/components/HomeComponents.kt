@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,6 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,7 +35,7 @@ import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 
 @Composable
-fun UserInfo(modifier: Modifier, bitmapImg: ImageBitmap?, username: String, time: String, onClick: () -> Unit) {
+fun UserInfo(modifier: Modifier, bitmapImg: Painter?, username: String, time: String, onClick: () -> Unit) {
     Surface(
         onClick,
         Modifier
@@ -44,11 +47,14 @@ fun UserInfo(modifier: Modifier, bitmapImg: ImageBitmap?, username: String, time
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
-                    .height(60.dp),
-                painter =  bitmapImg?.let { BitmapPainter(it) } ?: painterResource(id = R.drawable.ic_account),
-                contentDescription = null
+                    .height(60.dp)
+                    .width(60.dp),
+                painter = bitmapImg ?: painterResource(id = R.drawable.ic_account),
+                // painter =  bitmapImg?.let { BitmapPainter(it) } ?: painterResource(id = R.drawable.ic_account),
+                contentDescription = "Profile photo"
             )
             Column(
                 modifier = Modifier.padding(start = 10.dp)

@@ -23,12 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -64,7 +66,7 @@ fun HomeScreen(
     // variables
     val context = LocalContext.current
     val time = if (reports != null) reports?.reportTime else user?.lastScan
-    val localFile = File.createTempFile("iamge", "jpg") //File(context.filesDir, "image.jpg")
+    val localFile = File.createTempFile("image", "jpg") //File(context.filesDir, "image.jpg")
 
     // Firebase References
     val ref: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
@@ -98,18 +100,23 @@ fun HomeScreen(
     })
 
     // if (!localFile.exists()) {
-        userProfileImg.getFile(localFile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-            val imageBitmap = bitmap.asImageBitmap()
-
-            bitmapImg = imageBitmap
-        }
+//        userProfileImg.getFile(localFile).addOnSuccessListener {
+//            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+//            val imageBitmap = bitmap.asImageBitmap()
+//
+//            bitmapImg = imageBitmap
+//        }
 //    } else {
 //        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
 //        val imageBitmap = bitmap.asImageBitmap()
 //
 //        bitmapImg = imageBitmap
 //    }
+
+    val painter: Painter = if (user?.userPhotoUrl.toString().isNotEmpty())
+        rememberImagePainter(data = user?.userPhotoUrl.toString())
+    else
+        painterResource(id = R.drawable.ic_account)
 
 
     Column(
@@ -127,7 +134,8 @@ fun HomeScreen(
         ) {
             UserInfo(
                 Modifier,
-                bitmapImg,
+                painter,
+                // bitmapImg,
                 user?.userName.toString(),
                 time.toString()
             ) {

@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,8 +37,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.ScanReports
-import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
-import io.github.uxlabspk.neuroscape.ui.theme.OffWhiteColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.CustomDialog
@@ -82,29 +79,32 @@ fun AllScans(
     }
 
     if (isConfirmed) {
-        CustomDialog(
-            onDismissRequest = {
-                isConfirmed = false
-            },
-            onConfirmation = {
-                isConfirmed = false
-                FirebaseDatabase.getInstance().getReference().child("Users")
-                    .child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports")
-                    .removeValue().addOnSuccessListener {
-                    Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
-                    reports = emptyList()
-                }.addOnFailureListener {
-                    Toast.makeText(
-                        context,
-                        "Unknown Error Occur!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            },
-            dialogTitle = "Confirm",
-            dialogText = "Are you sure to delete?",
-            icon = Icons.Default.CheckCircle
-        )
+        if (reports.isNotEmpty()) {
+            CustomDialog(
+                onDismissRequest = {
+                    isConfirmed = false
+                },
+                onConfirmation = {
+                    isConfirmed = false
+                    FirebaseDatabase.getInstance().getReference().child("Users")
+                        .child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("Reports")
+                        .removeValue().addOnSuccessListener {
+                            Toast.makeText(context, "Successfully Deleted!", Toast.LENGTH_SHORT).show()
+                            reports = emptyList()
+                        }.addOnFailureListener {
+                            Toast.makeText(
+                                context,
+                                "Unknown Error Occur!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                },
+                dialogTitle = "Confirm",
+                dialogText = "Are you sure to delete?",
+                icon = Icons.Default.CheckCircle
+            )
+        }
+
     }
 
     Column(
@@ -156,7 +156,7 @@ fun AllScans(
                     )
                     Text(
                         "No Reports Found",
-                        color = MaterialTheme.colorScheme.surface,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         fontFamily = SF_Font_Family,
                         fontWeight = FontWeight.Normal
                     )

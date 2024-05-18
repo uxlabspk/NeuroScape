@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -44,6 +45,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
+import io.github.uxlabspk.neuroscape.views.components.ProgressDialog
 import io.github.uxlabspk.neuroscape.views.components.TopBar
 
 
@@ -55,15 +57,18 @@ fun LoginScreen(
     var textState by remember { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
 
     val icon =
         if (passwordVisibility) painterResource(id = R.drawable.ic_visible)
         else painterResource(id = R.drawable.ic_invisible)
 
     // variables
-    val isEmailError = false
-    val isPasswordError = false
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    ProgressDialog(isLoading, "Authenticating")
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
         TopBar(text = "Login", modifier = Modifier.height(54.dp)) { navController.navigateUp() }
@@ -82,30 +87,39 @@ fun LoginScreen(
 
             TextField(
                 value = textState,
-                onValueChange = { textState = it },
+                onValueChange = { newText ->
+                    textState = newText
+                    isValidEmail(newText)
+                    },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp),
-                label = { Text("Enter your email...") },
+                label = { Text("Enter your email...", color = MaterialTheme.colorScheme.onPrimary) },
                 isError = isEmailError,
                 leadingIcon = {
                     Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
                 },
+
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-
-                    cursorColor = Color.Black
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                )
             )
 
             TextField(
@@ -117,7 +131,7 @@ fun LoginScreen(
                     password = it
                 },
                 isError = isPasswordError,
-                label = { Text(text = "Password") },
+                label = { Text(text = "Password", color = MaterialTheme.colorScheme.onPrimary) },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_password),
@@ -136,43 +150,61 @@ fun LoginScreen(
                 },
                 colors = TextFieldDefaults.colors(
                     unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
                     unfocusedLabelColor = Color.DarkGray,
                     focusedLabelColor = Color.DarkGray,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.DarkGray,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.LightGray,
-                    cursorColor = Color.Black
+                    focusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedLeadingIconColor = MaterialTheme.colorScheme.onPrimary,
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    cursorColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 shape = RoundedCornerShape(5.dp),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Go
                 ),
                 visualTransformation = if (passwordVisibility) VisualTransformation.None
                 else PasswordVisualTransformation()
             )
 
             PrimaryButton(text = "Login", modifier = Modifier.fillMaxWidth()) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
-                    .addOnCompleteListener() { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)
-                                .show()
-                            navController.addOnDestinationChangedListener { controller, destination, _ ->
-                                if (destination.route == "signin") {
-                                    controller.navigate("home")
+                if (isValidEmail(textState)) {
+                    isEmailError = false
+                    if (isValidPassword(password)) {
+                        isPasswordError = false
+                        isLoading = true
+                        FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
+                            .addOnCompleteListener() { task ->
+                                if (task.isSuccessful) {
+                                    isLoading = false
+                                    Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)
+                                        .show()
+                                    navController.addOnDestinationChangedListener { controller, destination, _ ->
+                                        if (destination.route == "signin") {
+                                            controller.navigate("home")
+                                        }
+                                    }
+                                } else {
+                                    isLoading = false
+                                    Toast.makeText(
+                                        context,
+                                        "Authentication failed: ${task.exception?.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Authentication failed: ${task.exception?.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                    } else {
+                        isPasswordError = true
                     }
+                } else {
+                    isEmailError = true
+                }
+
             }
             Row(
                 modifier = Modifier
@@ -203,4 +235,15 @@ fun LoginScreen(
 
         }
     }
+}
+
+
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
+    return emailRegex.matches(email)
+}
+
+
+private fun isValidPassword(password: String): Boolean {
+    return (password.length >= 8)
 }
