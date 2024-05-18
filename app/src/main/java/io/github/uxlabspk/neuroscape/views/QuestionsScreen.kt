@@ -118,7 +118,12 @@ fun QuestionsScreen(
 
                     updateDatabase(mappedList.sum())
 
-                    navController.navigate("result/$arg")
+                    // navController.navigate("result/$arg")
+                    navController.addOnDestinationChangedListener { controller, destination, _ ->
+                        if (destination.route == "questionsScreen") {
+                            navController.navigate("result/$arg")
+                        }
+                    }
                 } else {
                     Toast.makeText(context, "Please fill all questions before proceeding", Toast.LENGTH_LONG).show()
                 }

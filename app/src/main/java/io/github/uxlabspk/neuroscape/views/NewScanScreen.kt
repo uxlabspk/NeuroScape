@@ -102,7 +102,11 @@ fun NewScanScreen(
                     FirebaseDatabase.getInstance().getReference().child("Users").child(uid.toString())
                         .child("Reports").child(System.currentTimeMillis().toString())
                         .setValue(scanReport).addOnSuccessListener {
-                            navController.navigate("questionsScreen")
+                            navController.addOnDestinationChangedListener { controller, destination, _ ->
+                                if (destination.route == "newscan") {
+                                    controller.navigate("questionsScreen")
+                                }
+                            }
                         }.addOnFailureListener {
                             Toast.makeText(context, "Something wents wrong.", Toast.LENGTH_SHORT).show()
                         }

@@ -265,9 +265,10 @@ fun SignupScreen(
                                                 ).show()
                                             }
                                     } else {
+                                        isLoading = false
                                         Toast.makeText(
                                             context,
-                                            "Something ghv went wrong : ${task.exception?.message}",
+                                            "Something Went Wrong : ${task.exception?.message}",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
