@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,12 +46,13 @@ fun UserInfo(modifier: Modifier, bitmapImg: ImageBitmap?, username: String, time
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
-                    .height(60.dp),
+                    .height(60.dp)
+                    .width(60.dp),
                 painter =  bitmapImg?.let { BitmapPainter(it) } ?: painterResource(id = R.drawable.ic_account),
-                contentDescription = null
+                contentDescription = "Profile photo"
             )
             Column(
                 modifier = Modifier.padding(start = 10.dp)

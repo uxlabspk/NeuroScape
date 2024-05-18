@@ -112,8 +112,7 @@ fun ProfileScreen(
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
                     .size(120.dp),
-                contentDescription = null
-                ,
+                contentDescription = "Profile photo"
             )
             Text(
                 text = user?.userName.toString(),
