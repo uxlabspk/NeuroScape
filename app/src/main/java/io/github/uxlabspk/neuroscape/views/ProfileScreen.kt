@@ -94,7 +94,14 @@ fun ProfileScreen(
 //        bitmapImg = imageBitmap
 //    }
 
-    val painter: Painter = rememberImagePainter(data = user?.userPhotoUrl.toString())
+
+    val painter: Painter = if (user?.userPhotoUrl.toString().isNotEmpty())
+        rememberImagePainter(data = user?.userPhotoUrl.toString())
+    else
+        painterResource(id = R.drawable.ic_account)
+
+
+
 
 
     Column(
@@ -112,7 +119,7 @@ fun ProfileScreen(
             Image(
                 // painter = bitmapImg?.let { BitmapPainter(it) }
                 //    ?: painterResource(id = R.drawable.ic_account),
-                painter = painter ?: painterResource(id = R.drawable.ic_account),
+                painter = painter, // painter ?: painterResource(id = R.drawable.ic_account),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))

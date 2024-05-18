@@ -113,7 +113,11 @@ fun HomeScreen(
 //        bitmapImg = imageBitmap
 //    }
 
-    val painter: Painter = rememberImagePainter(data = user?.userPhotoUrl.toString())
+    val painter: Painter = if (user?.userPhotoUrl.toString().isNotEmpty())
+        rememberImagePainter(data = user?.userPhotoUrl.toString())
+    else
+        painterResource(id = R.drawable.ic_account)
+
 
     Column(
         Modifier
