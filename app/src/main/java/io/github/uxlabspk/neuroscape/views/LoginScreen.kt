@@ -179,7 +179,7 @@ fun LoginScreen(
                         isPasswordError = false
                         isLoading = true
                         FirebaseAuth.getInstance().signInWithEmailAndPassword(textState, password)
-                            .addOnCompleteListener() { task ->
+                            .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     isLoading = false
                                     Toast.makeText(context, "Authentication successful", Toast.LENGTH_SHORT)

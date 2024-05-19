@@ -3,7 +3,6 @@ package io.github.uxlabspk.neuroscape.views
 import android.content.ContentResolver
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -148,7 +147,7 @@ fun EditProfile(
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
                 if(username.isNotEmpty()) {
                     databaseRef.child(userId.toString()).child("Profile").child("userName").setValue(username)
-                        .addOnCompleteListener() {task ->
+                        .addOnCompleteListener {task ->
                             if (task.isSuccessful) {
                                 Toast.makeText(
                                     context,

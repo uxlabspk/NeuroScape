@@ -1,5 +1,7 @@
 package io.github.uxlabspk.neuroscape
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -19,20 +21,7 @@ import io.github.uxlabspk.neuroscape.views.QuestionsScreen
 import io.github.uxlabspk.neuroscape.views.ScanResults
 import io.github.uxlabspk.neuroscape.views.SignupScreen
 
-
-/*
-* 1. Welcome
-* 2. signin
-* 3. signup
-* 4. home
-* 5. newscan
-* 6. questionsScreen
-* 7. results
-* 8. recent scans
-* 9. profile
-*/
-
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NeuroScapeNavHost(
     navController: NavHostController = rememberNavController()
@@ -61,9 +50,6 @@ fun NeuroScapeNavHost(
         composable("questionsScreen") {
             QuestionsScreen(navController = navController)
         }
-//        composable("result") {
-//            ScanResults(navController = navController, isAutismTraits = true)
-//        }
         composable(
             route = "result/{argument}",
             arguments = listOf(navArgument("argument") { type = NavType.BoolType })
@@ -72,13 +58,12 @@ fun NeuroScapeNavHost(
             if (argument != null) {
                 ScanResults(navController = navController, isAutismTraits = argument)
             }
-            //ScreenB(navController = navController, argument = argument)
         }
         composable("profile") {
             ProfileScreen(navController = navController)
         }
         composable("editprofile") {
-            EditProfile(navController = navController) //(navController = navController)
+            EditProfile(navController = navController)
         }
     }
 }

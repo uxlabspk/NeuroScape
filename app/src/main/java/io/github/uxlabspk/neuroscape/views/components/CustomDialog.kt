@@ -1,19 +1,13 @@
 package io.github.uxlabspk.neuroscape.views.components
 
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 
 
@@ -23,7 +17,6 @@ fun CustomDialog(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
-    icon: ImageVector,
 ) {
     AlertDialog(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -52,17 +45,5 @@ fun CustomDialog(
                 onDismissRequest()
             }
         }
-    )
-}
-
-@Preview
-@Composable
-fun Preview() {
-    CustomDialog(
-        onDismissRequest = { /*TODO*/ },
-        onConfirmation = { /*TODO*/ },
-        dialogTitle = "Do you want to delete?",
-        dialogText = "Choose any option",
-        icon = Icons.Default.Face
     )
 }
