@@ -42,7 +42,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,7 +50,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
-import io.github.uxlabspk.neuroscape.ui.theme.GrayColor
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.PrimaryButton
 import io.github.uxlabspk.neuroscape.views.components.ProgressDialog
@@ -85,7 +83,7 @@ fun SignupScreen(
     ProgressDialog(isLoading, "Authenticating")
 
     Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-        TopBar(text = "Sign up", modifier = Modifier.height(54.dp), { navController.navigateUp() })
+        TopBar(text = "Sign up", modifier = Modifier.height(54.dp)) { navController.navigateUp() }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -231,7 +229,7 @@ fun SignupScreen(
                             isLoading = true
                             FirebaseAuth.getInstance()
                                 .createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener() { task ->
+                                .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         val date = LocalDateTime.now()
                                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
@@ -246,7 +244,7 @@ fun SignupScreen(
                                             .child("Profile")
                                             .setValue(user)
                                             .addOnSuccessListener {
-                                                navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+                                                navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, _: Bundle? ->
                                                     if (navDestination.route == "signup") {
                                                         isLoading = false
                                                         Toast.makeText(

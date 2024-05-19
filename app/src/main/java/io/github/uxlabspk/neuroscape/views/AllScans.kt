@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -100,8 +98,7 @@ fun AllScans(
                         }
                 },
                 dialogTitle = "Confirm",
-                dialogText = "Are you sure to delete?",
-                icon = Icons.Default.CheckCircle
+                dialogText = "Are you sure to delete?"
             )
         }
 

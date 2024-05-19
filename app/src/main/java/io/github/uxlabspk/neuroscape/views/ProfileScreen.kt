@@ -1,6 +1,5 @@
 package io.github.uxlabspk.neuroscape.views
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,18 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -40,32 +35,24 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import io.github.uxlabspk.neuroscape.R
 import io.github.uxlabspk.neuroscape.data.User
 import io.github.uxlabspk.neuroscape.ui.theme.SF_Font_Family
 import io.github.uxlabspk.neuroscape.views.components.AltButton
 import io.github.uxlabspk.neuroscape.views.components.TopBar
-import java.io.File
 
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun ProfileScreen(
     navController: NavController
 ) {
     // states
     var user by remember { mutableStateOf<User?>(null) }
-    var bitmapImg by remember { mutableStateOf<ImageBitmap?>(null) }
-
-    // variables
-    val context = LocalContext.current
-    val localFile = File.createTempFile("image", "jpg") //File(context.filesDir, "image.jpg")
 
     // Firebase Reference
     val databaseRef: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
     val userId = FirebaseAuth.getInstance().currentUser?.uid
-    val storageRef = FirebaseStorage.getInstance().getReference("images/")
-    val userProfileImg = storageRef.child(FirebaseAuth.getInstance().currentUser?.uid.toString())
 
     databaseRef.child(userId.toString()).child("Profile")
         .addValueEventListener(object : ValueEventListener {
@@ -80,36 +67,17 @@ fun ProfileScreen(
             override fun onCancelled(error: DatabaseError) {}
         })
 
-    // if (!localFile.exists()) {
-//        userProfileImg.getFile(localFile).addOnSuccessListener {
-//            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-//            val imageBitmap = bitmap.asImageBitmap()
-//
-//            bitmapImg = imageBitmap
-//        }
-//    } else {
-//        val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-//        val imageBitmap = bitmap.asImageBitmap()
-//
-//        bitmapImg = imageBitmap
-//    }
-
-
     val painter: Painter = if (user?.userPhotoUrl.toString().isNotEmpty())
         rememberImagePainter(data = user?.userPhotoUrl.toString())
     else
         painterResource(id = R.drawable.ic_account)
-
-
-
-
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        TopBar(text = "Profile", modifier = Modifier.height(56.dp), { navController.navigateUp() })
+        TopBar(text = "Profile", modifier = Modifier.height(56.dp)) { navController.navigateUp() }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,9 +85,7 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                // painter = bitmapImg?.let { BitmapPainter(it) }
-                //    ?: painterResource(id = R.drawable.ic_account),
-                painter = painter, // painter ?: painterResource(id = R.drawable.ic_account),
+                painter = painter,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))

@@ -2,7 +2,6 @@ package io.github.uxlabspk.neuroscape.views
 
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -111,19 +110,18 @@ fun QuestionsScreen(
                             else -> if (value in 0..2) 1 else 0
                         }
                     }
-                    val mappedArray = mappedList.map { it.toFloat() }.toFloatArray() // mappedList.toFloatArray()
-                    val result = modelRead(context, mappedArray) // 1/0
+                    val mappedArray = mappedList.map { it.toFloat() }.toFloatArray()
+                    val result = modelRead(context, mappedArray)
                     val arg = result == 1
-                    Log.d("a", arg.toString())
 
                     updateDatabase(mappedList.sum())
 
-                    // navController.navigate("result/$arg")
-                    navController.addOnDestinationChangedListener { controller, destination, _ ->
-                        if (destination.route == "questionsScreen") {
-                            navController.navigate("result/$arg")
-                        }
-                    }
+//                    navController.addOnDestinationChangedListener { controller, destination, _ ->
+//                        if (destination.route == "questionsScreen") {
+//                            controller.navigate("result/$arg")
+//                        }
+//                    }
+                    navController.navigate("result/$arg")
                 } else {
                     Toast.makeText(context, "Please fill all questions before proceeding", Toast.LENGTH_LONG).show()
                 }
@@ -143,16 +141,6 @@ private fun updateDatabase(sum: Int) {
             databaseRef.child(childSnapshot.key.toString()).setValue(scanReport)
         }
     }
-
-//        .addValueEventListener(object: ValueEventListener {
-//        override fun onDataChange(snapshot: DataSnapshot) {
-//            val scanReports = snapshot.getValue(ScanReports::class.java)
-//
-//            Log.d("TAG", "onDataChange: ${scanReports?.reportName}")
-//        }
-//
-//        override fun onCancelled(error: DatabaseError) { TODO("Not yet implemented") }
-//    })
 }
 
 @Composable
@@ -201,139 +189,16 @@ private fun isValidArray(array: List<Int>): Boolean {
 fun modelRead(context: Context, questionAnswers: FloatArray): Int {
     val model = Model.newInstance(context)
 
-    // Creates inputs for reference.
     val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 10), DataType.FLOAT32)
+    inputFeature0.loadArray(questionAnswers)
 
-    inputFeature0.loadArray(questionAnswers) //.loadArray(questionAnswers) //(floatArrayOf(0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F))
-
-    // Runs model inference and gets result.
     val outputs = model.process(inputFeature0)
+
     val outputFeature0 = outputs.outputFeature0AsTensorBuffer
 
-    val floatArray: FloatArray = outputFeature0.floatArray
-    val intArray: IntArray = floatArray.map { it.toInt() }.toIntArray()
-
-
-    // Showing the output to logcat
-    Log.d("Output", intArray[0].toString())
+    val intArray: IntArray = outputFeature0.floatArray.map { it.toInt() }.toIntArray()
 
     model.close()
 
     return intArray[0]
 }
-
-
-//
-//@Composable
-//fun QuestionsScreen(
-//    navController: NavController,
-//) {
-//    var index by remember { mutableStateOf(0) }
-//    val context = LocalContext.current
-//
-//    var questionsList = listOf(
-//        "Does your child look at you when you call his/her name?",
-//        "How easy is it for you to get eye contact with your child?",
-//        "Does your child point to indicate that s/he wants something? (e.g. a toy that is out of reach)",
-//        "Does your child point to share interest with you? (e.g. pointing at an interesting sight)",
-//        "Does your child pretend? (e.g. care for dolls, talk on a toy phone)",
-//        "Does your child follow where you’re looking?",
-//        "If you or someone else in the family is visibly upset, does your child show signs of wanting to comfort them? (e.g. stroking hair, hugging them)",
-//        "Would you describe your child’s first words as:",
-//        "Does your child use simple gestures? (e.g. wave goodbye)",
-//        "Does your child stare at nothing with no apparent purpose?",
-//    )
-//
-//    val back = { index = (index - 1 + questionsList.size) % questionsList.size }
-//    var next = if (index == 9) {
-//        {
-//            navController.navigate("result")
-//            modelRead(context)
-//        }
-//    } else {
-//        { index = (index + 1) % questionsList.size }
-//    }
-//
-//    //if (index < 9) reset = true
-//
-//
-//    MainScreen(navController, questionsList[index], index, next, back)
-//}
-//
-//
-//@Composable
-//fun MainScreen(
-//    navController: NavController,
-//    questions: String,
-//    questionsIndex: Int,
-//    onNextClicked: () -> Unit,
-//    onBackClicked: () -> Unit
-//) {
-//    val nextText = if (questionsIndex == 9) "Generate Report" else "Next"
-//
-//    // val btnOnClick = if (next_Text == "Next") {onNextClicked} else { navController.navigate("home") }
-//
-//    var answersList = mutableMapOf<String, String>()
-//
-////        answerList.put("key2", "value2")
-//
-//    Column(
-//        Modifier.background(MaterialTheme.colorScheme.background)
-//    ) {
-//        TopBar(text = "${questionsIndex + 1}/10", modifier = Modifier) {
-//            navController.navigateUp()
-//        }
-//        Column(
-//            Modifier
-//                .padding(horizontal = 20.dp)
-//                .padding(top = 20.dp)
-//        ) {
-//            Box(
-//                Modifier
-//                    .fillMaxWidth()
-//                    .clip(RoundedCornerShape(12.dp))
-//                    .background(MaterialTheme.colorScheme.surface)
-//            ) {
-//                Text(text = questions, Modifier.padding(10.dp))
-//            }
-//
-//            Column(
-//                Modifier
-//                    .fillMaxHeight(8 / 9f)
-//                    .padding(top = 10.dp)
-//            ) {
-//                McqsRadioButton(
-//                    option1 = "Always",
-//                    option2 = "Usually",
-//                    option3 = "Sometimes",
-//                    option4 = "Rarely",
-//                    option5 = "Never"
-//                )
-//            }
-//
-//            Row(
-//                Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 15.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween
-//            ) {
-//
-//                NavigationButton(
-//                    text = "Previous",
-//                    modifier = Modifier.width(150.dp),
-//                    isNext = false,
-//                    onClick = onBackClicked
-//                )
-//
-//                NavigationButton(
-//                    text = nextText,
-//                    modifier = Modifier.width(150.dp),
-//                    isNext = true,
-//                    onClick = onNextClicked
-//                )
-//            }
-//        }
-//    }
-//}
-//
-
