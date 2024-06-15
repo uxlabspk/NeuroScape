@@ -3,6 +3,7 @@ package io.github.uxlabspk.neuroscape.views
 import android.content.ContentResolver
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -143,7 +144,7 @@ fun EditProfile(
                     fontWeight = FontWeight.Normal
                 )
             )
-
+            
             PrimaryButton(text = "Update Profile", modifier = Modifier.fillMaxWidth()) {
                 if(username.isNotEmpty()) {
                     databaseRef.child(userId.toString()).child("Profile").child("userName").setValue(username)
@@ -156,6 +157,7 @@ fun EditProfile(
                                 ).show()
                                 username = ""
                             } else {
+                                isLoading = false
                                 Toast.makeText(
                                     context,
                                     "Something went wrong",
@@ -166,17 +168,26 @@ fun EditProfile(
                 }
 
                 isLoading = true
-                selectedImageUri.value?.let {
+                selectedImageUri.value?.let { it ->
                     userProfileImg.putFile(it).addOnSuccessListener {
-                        userProfileImg.downloadUrl.addOnSuccessListener {uri ->
-                            databaseRef.child(userId.toString()).child("Profile").child("userPhotoUrl").setValue(uri.toString())
-                            isLoading = false
-                            Toast.makeText(
-                                context,
-                                "Profile Successfully Updated.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        userProfileImg.downloadUrl
+                            .addOnSuccessListener {uri ->
+                                databaseRef.child(userId.toString()).child("Profile").child("userPhotoUrl").setValue(uri.toString())
+                                isLoading = false
+                                Toast.makeText(
+                                    context,
+                                    "Profile Successfully Updated.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                         }
+                            .addOnFailureListener { 
+                                Log.d("EditProfile", "Error: ${it.message}")
+                                isLoading = false
+                                Toast.makeText(
+                                    context,
+                                    "Something went wrong",
+                                    Toast.LENGTH_SHORT).show()
+                            }
 
                     }
                 }

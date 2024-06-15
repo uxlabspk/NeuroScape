@@ -256,6 +256,7 @@ fun SignupScreen(
                                                     }
                                                 }
                                             }.addOnFailureListener {
+                                                isLoading = false
                                                 Toast.makeText(
                                                     context,
                                                     "Something abc went wrong : ${task.exception?.message}",
